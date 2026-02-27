@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# .htaccess — GoDaddy cPanel / Phusion Passenger (Python)
+#
+# cPanel's "Setup Python App" writes its own PassengerEnabled directive into
+# a system-level .htaccess.  This file adds the routing rules that ensure
+# every request is forwarded to the Flask app instead of being served as a
+# static file.
+# ---------------------------------------------------------------------------
+
+# Hand all requests to Passenger / Flask
+PassengerEnabled On
+
+# Remove the next two lines if cPanel's Setup Python App tool sets them for you
+PassengerStartupFile passenger_wsgi.py
+PassengerAppType wsgi
+
+# Redirect all requests to the WSGI application unless the path is a real file
+# (static assets — CSS, JS, images — are served directly by Apache)
+RewriteEngine On
+
+# Serve existing static files directly (avoids routing them through Flask)
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Route everything else to Passenger
+RewriteRule ^(.*)$ passenger_wsgi.py/$1 [QSA,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Cache static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css             "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png            "access plus 1 month"
+    ExpiresByType image/jpeg           "access plus 1 month"
+    ExpiresByType image/svg+xml        "access plus 1 month"
+    ExpiresByType image/webp           "access plus 1 month"
+</IfModule>
