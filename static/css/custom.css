@@ -1,0 +1,133 @@
+/* =============================================
+   Prezent.Energy — Custom CSS
+   Tailwind handles most styling; this file
+   covers overrides and non-Tailwind elements.
+   ============================================= */
+
+/* Smooth scrolling polyfill for older Safari */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Select arrow override (dark background) */
+select.form-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234ade80' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* Chat window: hide scrollbar but keep scroll */
+#chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: #22c55e #111827;
+}
+#chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+#chat-messages::-webkit-scrollbar-track {
+  background: #111827;
+}
+#chat-messages::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 2px;
+}
+
+/* Chat bubble styles */
+.chat-bubble-user {
+  background: #16a34a;
+  color: white;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  padding: 0.625rem 0.875rem;
+  max-width: 85%;
+  align-self: flex-end;
+  margin-left: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.chat-bubble-bot {
+  background: #1f2937;
+  color: #d1fae5;
+  border: 1px solid #22c55e30;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.625rem 0.875rem;
+  max-width: 85%;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.chat-bubble-bot a {
+  color: #4ade80;
+  text-decoration: underline;
+}
+
+/* News section messages */
+.news-bubble-user {
+  background: #15803d;
+  color: white;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  padding: 0.75rem 1rem;
+  max-width: 90%;
+  align-self: flex-end;
+  margin-left: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.news-bubble-agent {
+  background: #111827;
+  border: 1px solid #22c55e25;
+  color: #e5e7eb;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0.625rem 0.875rem;
+}
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+  animation: typing-bounce 1.2s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30%            { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Form success/error banners */
+.form-success {
+  background: #14532d;
+  border: 1px solid #22c55e;
+  color: #bbf7d0;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.form-error {
+  background: #450a0a;
+  border: 1px solid #ef4444;
+  color: #fecaca;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* FAQ accordion transition */
+.faq-answer {
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}

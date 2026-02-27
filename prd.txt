@@ -1,0 +1,124 @@
+This Website Requirement Document (WRD) provides the technical and design specifications for rebuilding Prezent.Energy. The site must serve as a high-conversion platform that demonstrates our "infrastructure-lite" revolution to three primary segments: City Vehicle Fleets, Business Campuses, and Residential Complexes.
+I will be deploying the website on Goddady.com which uses wordpress
+
+--------------------------------------------------------------------------------
+1. Visual Identity & User Interface (UI) Strategy
+The UI must balance futuristic technology with professional reliability.
+For City Fleets: Focus on technical authority, featuring clean data visualizations and reporting metrics.
+For Business Campuses: Focus on "frictionless" productivity, highlighting the 90–130 hours of annual employee time saved.
+For Residential Complexes: Focus on "Zero-Hassle" amenity value, emphasizing that 36% of Americans in multi-unit housing currently lack charging access.
+
+--------------------------------------------------------------------------------
+2. Core Site Map & Section Requirements
+A. Hero Section: "The Future of Charging is Here"
+Background Visual: Embed the video from www.prezent.energy showing the autonomous robot implementation in a car park.
+Headline: EV Charging That Comes to You.
+Value Callouts: $0 Infrastructure Investment • 1-Week Launch • 100% Employee Coverage.
+B. The Workplace Charging Challenge
+Content: Contrast the "Old Way" of static infrastructure: $50,000+ average cost per station, 6–12 month installation timelines, and the frustration of "Limited Spots".
+C. Charging as a Service: The Smart Alternative
+Content: Highlight our "Infrastructure-Lite" advantage. No electrical work, no permitting, and the ability to scale up or down effortlessly.
+Value Prop: "Launch in days, not months".
+D. How It Works (The 4-Step Autonomous Journey)
+BOOK: Simple app scheduling for morning/evening slots.
+CHARGE: Self-driving robots (VoltBots) navigate to parked vehicles.
+REPORT: Real-time dashboards showing usage and carbon reduction metrics.
+GRID SUPPORT: Participants earn 800–1,200 annually per vehicle by using EVs as active grid assets during peak loads.
+E. Seamless Integration
+Content: Demonstrate how we handle everything from equipment management to liability insurance, allowing facilities teams to stay focused on core priorities.
+F. Pricing Information
+Plan
+Price
+Target Audience
+Key Features
+Starter Plan
+$35 / session
+Small teams/Pilots
+25 kWh per session, flexible scheduling, no commitment.
+Corporate Plan
+$1,400 / month
+10+ EV drivers
+40 sessions/mo, priority windows, dedicated account manager.
+Enterprise
+Custom
+50+ employees
+Dedicated infrastructure, white-label options, priority support.
+G. Our Management Team
+Feature bios of the core leadership to establish technical authority:
+Kevin Cameron (Founder & CTO): 25+ years in semiconductors and robotics.
+Jens Andersen (Co-CEO): Revenue architect and startup specialist.
+Jean Delphonse (COO/Co-CEO): 20+ years in data engineering and scaling tech ventures.
+Chris Novak (IP Attorney): 20+ years specializing in energy licensing and IP protection.
+
+--------------------------------------------------------------------------------
+3. Interactive & Technical Features
+Autonomous Chatbot: A persistent UI element trained on our technical specs and V2X roadmap to answer "immediate" client questions regarding compatibility and launch timelines.
+News & Blogs (AI Agent): A dynamic feed where an AI Agent allows users to query the latest news on CaaS trends and state regulations (e.g., LCFS implementation or California SB 100 updates).
+Frequently Asked Questions (FAQ): Address common concerns regarding thermal management, compatibility (CCS1/CCS2), and the transition from "dongle" solutions to direct-to-battery charging.
+
+--------------------------------------------------------------------------------
+4. Backend & Lead Generation Requirements
+Call to Action (CTA): A clean "Schedule Demo" or "Apply to Meet" form.
+Database Integration: Claude Code must structure the backend to capture lead data (Name, Company, Fleet Size, Location) and save it to a SQL Lite database for ease of maintenance and portability.
+Scalability: The backend must be ready to support a future client-facing Reporting Dashboard.
+
+--------------------------------------------------------------------------------
+5. Contact Information (Footer)
+Website: www.prezent.energy
+Phone: (408) 758-8293
+Email: info@prezent.energy
+
+The 130-hour productivity savings represents the cumulative time an individual employee regains annually by utilizing Prezent Energy's on-demand mobile charging instead of traditional fixed infrastructure.
+This efficiency gain is driven by three primary factors identified in the sources:
+Elimination of the "Charging Shuffle": Traditional corporate campuses often have a limited number of fixed charging stations relative to the number of EV-driving employees. This forces workers to interrupt their day to search for an open spot or move their vehicle mid-day once it has finished charging to avoid idle fees or accommodate colleagues.
+On-Demand Autonomous Delivery: Prezent Energy’s VoltBot autonomous robots navigate directly to a vehicle's GPS coordinates wherever it is parked in the lot. Because the "power comes to the car" rather than the "car searching for power," employees do not spend time walking to distant charging bays or managing vehicle rotations.
+Frictionless Scheduling: Employees use a simple mobile app to book a morning or evening slot, allowing them to remain focused on their core business priorities while the charging happens "hands-off" in the background.
+For large employers, particularly FAANG campuses and enterprise sites, this model allows them to "ingest" these lost hours back into productive tasks while providing 100% employee coverage. This serves as a significant competitive advantage in talent markets by eliminating commute range anxiety and the daily stress of competing for limited charging spots
+
+The form should include the following fields:
+1. Primary Contact Information
+Full Name: Necessary for personalized follow-up by the management team.
+Email Address: Essential for professional correspondence and sending pricing plans.
+Phone Number: Critical for the "Schedule Demo" call to action.
+2. Organization & Industry Qualification
+Company/Organization Name: Helps identify high-value target accounts such as "FAANG" campuses or specific city departments.
+Industry Segment (Dropdown): This is vital for the UI to route the lead correctly. Options should include:
+City Vehicle Fleet
+Business Campus / Workplace
+Residential Complex / Multi-Unit Dwelling
+Hotel / Hospitality
+3. Operational Data (For Financial Modeling)
+Fleet Size / Number of EVs: This allows the CEO to immediately estimate required charging sessions and robot deployments (e.g., one "lot" of 10 robots).
+Primary Location (City/Zip Code): Needed to verify if the site is within the initial service territory, such as Silicon Valley member communities.
+Current Charging Status: A checkbox or dropdown (e.g., "Zero Infrastructure," "Fixed Chargers (Insufficient)," or "Planning Phase") to tailor the "Infrastructure-Lite" pitch.
+4. Strategic Interest Areas
+Primary Interest (Multiple Choice): Allows the AI Agent to provide relevant information in the follow-up:
+Employee Productivity / Time Savings
+Virtual Power Plant (VPP) / Grid Support Revenue
+Zero CapEx Subscription (CaaS)
+Carbon Reduction Reporting
+5. Lead Intent
+Timeline for Implementation: Options like "Within 1 week" (highlighting Prezent's speed), "1-3 months," or "Budgeting for 2027".
+Additional Comments / Special Requirements: For specific technical needs like V2X testing or bi-directional hardware requests.
+Technical Implementation Note
+As per the requirement document, these fields must be saved to a SQLite database. This lightweight structure will allow the Business Operations team to easily export lead data into the Key Metrics Dashboard to track customer acquisition costs and utilization projections
+
+The AI agent is designed to manage these feeds in the following ways:
+1. Targeted Information Aggregation
+The agent will pull and organize "the latest news publications" from high-authority sources identified in the documents, including:
+Infrastructure Funding: Live announcements from the Department of Energy (DOE) Infrastructure eXCHANGE, specifically tracking opportunities from the Grid Deployment Office (GDO) and the Office of Manufacturing and Energy Supply Chains (MESC).
+Utility Market Updates: Strategic updates from PG&E's Program Advisory Council (PAC), focusing on the progress of EV fleet programs and standard review projects.
+Market Intelligence: Trends in the Portable DC Fast Charger market, which is projected to reach $633M by 2033, including developments in smart charger integration and solar-powered units.
+2. Regulatory and Compliance Monitoring
+A core function of the AI agent is to help clients navigate the "complexity of the installation process" by managing feeds related to state and federal regulations:
+California SB 100: Tracking progress toward the goal of 100% renewable and carbon-free electricity by 2045.
+LCFS Implementation: Providing live updates on the Low Carbon Fuel Standard (LCFS) 2026 Implementation Plan and its impact on non-residential portfolios.
+V2X Standards: Monitoring the evolution of bidirectional charging standards like ISO 15118-20 and UL 9741.
+3. User-Driven Querying (Dynamic Interface)
+Instead of a static blog list, the AI agent serves as a functional UI element that allows potential clients to:
+Query Specific Topics: Users can ask the agent about specific CaaS trends or how new regulations might affect their specific site type (e.g., City Fleets vs. Residential Complexes) [Conversation History].
+Technical Specifications: It can answer immediate questions regarding hardware compatibility (e.g., CCS1 vs. CCS2) and thermal management risks found in recent market reports [312, 323, Conversation History].
+4. Roadmap Integration
+The agent aligns its news management with Prezent Energy’s 2029 goal of becoming a full energy company, specifically filtering for news that supports the Virtual Power Plant (VPP) and Vehicle-to-Grid (V2G) ecosystem leadership.
+While the sources define the agent's functional requirements and the specific data sources it will monitor, the precise technical backend architecture for its autonomous management is not detailed in the provided materials and would be a task for the developer (Claude Code) to structure during the rebuild.
+

@@ -1,0 +1,789 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ============================================================
+     A. HERO
+     ============================================================ -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+  <!-- Background video -->
+  <div class="absolute inset-0 z-0">
+    <video autoplay muted loop playsinline
+           class="w-full h-full object-cover opacity-30">
+      <source src="https://storage.googleapis.com/msgsndr/AxXXi10GcVNnYsWAJudh/media/683105d503c224f7cdabdbfb.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-dark/60 via-dark/40 to-dark"></div>
+  </div>
+
+  <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-4">
+      The Future of Charging is Here
+    </p>
+    <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight mb-6">
+      EV Charging That<br /><span class="text-brand-400">Comes to You.</span>
+    </h1>
+    <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+      Autonomous VoltBot robots deliver power directly to every vehicle in your lot —
+      zero infrastructure, zero hassle, one week to launch.
+    </p>
+
+    <!-- Value callouts -->
+    <div class="flex flex-wrap justify-center gap-6 mb-10 text-sm font-semibold">
+      <div class="bg-white/10 backdrop-blur-sm border border-brand-500/40 rounded-full px-6 py-3">
+        $0 Infrastructure Investment
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-brand-500/40 rounded-full px-6 py-3">
+        1-Week Launch
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm border border-brand-500/40 rounded-full px-6 py-3">
+        100% Employee Coverage
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="#demo"
+         class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-4
+                rounded-xl transition-colors text-lg shadow-lg shadow-brand-500/30">
+        Schedule a Demo
+      </a>
+      <a href="#how-it-works"
+         class="border border-white/30 hover:border-brand-400 text-white font-semibold
+                px-8 py-4 rounded-xl transition-colors text-lg">
+        See How It Works
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-gray-500 text-xs">
+    &#8595; scroll
+  </div>
+</section>
+
+
+<!-- ============================================================
+     B. THE WORKPLACE CHARGING CHALLENGE
+     ============================================================ -->
+<section id="challenge" class="py-24 px-6 bg-dark">
+  <div class="max-w-6xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      The Problem
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold text-center mb-16">
+      The Workplace Charging Challenge
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Old way -->
+      <div class="bg-red-950/30 border border-red-800/40 rounded-2xl p-8">
+        <p class="text-red-400 font-bold uppercase tracking-widest text-xs mb-4">The Old Way</p>
+        <h3 class="text-2xl font-bold mb-6">Fixed Infrastructure</h3>
+        <ul class="space-y-5 text-gray-300">
+          <li class="flex items-start gap-4">
+            <span class="text-red-400 text-xl mt-0.5">&#10005;</span>
+            <div>
+              <p class="font-semibold text-white">$50,000+ per station</p>
+              <p class="text-sm text-gray-400">Electrical upgrades, trenching, equipment, permits</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-red-400 text-xl mt-0.5">&#10005;</span>
+            <div>
+              <p class="font-semibold text-white">6–12 month installation timeline</p>
+              <p class="text-sm text-gray-400">Utility coordination, construction, inspections</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-red-400 text-xl mt-0.5">&#10005;</span>
+            <div>
+              <p class="font-semibold text-white">Limited spots — frustrated employees</p>
+              <p class="text-sm text-gray-400">Queuing, mid-day car moves, the "charging shuffle"</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-red-400 text-xl mt-0.5">&#10005;</span>
+            <div>
+              <p class="font-semibold text-white">36% of multi-unit residents lack access</p>
+              <p class="text-sm text-gray-400">No solution for parking structures without electrical capacity</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- New way -->
+      <div class="bg-brand-900/30 border border-brand-600/40 rounded-2xl p-8">
+        <p class="text-brand-400 font-bold uppercase tracking-widest text-xs mb-4">The Prezent Way</p>
+        <h3 class="text-2xl font-bold mb-6">Infrastructure-Lite CaaS</h3>
+        <ul class="space-y-5 text-gray-300">
+          <li class="flex items-start gap-4">
+            <span class="text-brand-400 text-xl mt-0.5">&#10003;</span>
+            <div>
+              <p class="font-semibold text-white">$0 upfront investment</p>
+              <p class="text-sm text-gray-400">No electrical work, no permitting, no construction</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-brand-400 text-xl mt-0.5">&#10003;</span>
+            <div>
+              <p class="font-semibold text-white">Launch in 1 week, not 12 months</p>
+              <p class="text-sm text-gray-400">VoltBots deploy and are operational within days</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-brand-400 text-xl mt-0.5">&#10003;</span>
+            <div>
+              <p class="font-semibold text-white">100% vehicle coverage</p>
+              <p class="text-sm text-gray-400">Robots come to every car, wherever it's parked</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="text-brand-400 text-xl mt-0.5">&#10003;</span>
+            <div>
+              <p class="font-semibold text-white">Scale up or down effortlessly</p>
+              <p class="text-sm text-gray-400">Add or remove robots as your fleet changes</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     B-2. VOLTBOT IN ACTION (VIDEO)
+     ============================================================ -->
+<section id="voltbot-video" class="py-24 px-6 bg-card">
+  <div class="max-w-5xl mx-auto text-center">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-3">
+      See It In Action
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold mb-6">
+      Meet the VoltBot
+    </h2>
+    <p class="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
+      Watch our autonomous charging robot navigate a real parking lot,
+      locate vehicles, and deliver power — no plugs, no queues, no infrastructure.
+    </p>
+
+    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10
+                bg-dark aspect-video mx-auto max-w-4xl">
+      <video controls playsinline preload="metadata"
+             poster="{{ url_for('static', filename='images/prezen_logo.webp') }}"
+             class="w-full h-full object-contain bg-black">
+        <source src="https://storage.googleapis.com/msgsndr/AxXXi10GcVNnYsWAJudh/media/683105d503c224f7cdabdbfb.mp4" type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-8 text-sm text-gray-400">
+      <div class="flex items-center gap-2">
+        <span class="text-brand-400 text-lg">&#9889;</span>
+        Autonomous navigation
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-brand-400 text-lg">&#9889;</span>
+        Deploys in under 1 week
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-brand-400 text-lg">&#9889;</span>
+        Zero infrastructure required
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     C. CHARGING AS A SERVICE
+     ============================================================ -->
+<section id="caas" class="py-24 px-6 bg-card">
+  <div class="max-w-6xl mx-auto text-center">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-3">
+      Our Model
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold mb-6">
+      Charging as a Service:<br />The Smart Alternative
+    </h2>
+    <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-16">
+      <span class="text-brand-400 font-semibold">Launch in days, not months.</span>
+      Our infrastructure-lite model removes every traditional barrier to workplace EV adoption.
+    </p>
+
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div class="bg-dark border border-white/10 rounded-2xl p-8 text-left">
+        <div class="text-4xl mb-4">&#9889;</div>
+        <h3 class="text-xl font-bold mb-3">Zero Electrical Work</h3>
+        <p class="text-gray-400 text-sm">
+          No panel upgrades, no trenching, no permits. VoltBots carry their own energy.
+          Your facilities team stays focused on core priorities.
+        </p>
+      </div>
+      <div class="bg-dark border border-white/10 rounded-2xl p-8 text-left">
+        <div class="text-4xl mb-4">&#128200;</div>
+        <h3 class="text-xl font-bold mb-3">Instant Scalability</h3>
+        <p class="text-gray-400 text-sm">
+          Add robots for peak demand, remove them in the off-season. Your subscription
+          flexes with your actual fleet — no stranded assets.
+        </p>
+      </div>
+      <div class="bg-dark border border-white/10 rounded-2xl p-8 text-left">
+        <div class="text-4xl mb-4">&#128275;</div>
+        <h3 class="text-xl font-bold mb-3">Full Liability Coverage</h3>
+        <p class="text-gray-400 text-sm">
+          We handle equipment management and insurance. If a VoltBot has an issue,
+          we fix it — you never touch it.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-10 bg-brand-900/20 border border-brand-600/30 rounded-2xl p-8 inline-block max-w-2xl">
+      <p class="text-3xl font-extrabold text-brand-400">90–130 hours</p>
+      <p class="text-white font-semibold mt-1">returned to each employee annually</p>
+      <p class="text-gray-400 text-sm mt-3">
+        By eliminating the "charging shuffle" — searching for open spots, moving cars mid-day,
+        managing idle fees — your team regains over three full work weeks per year.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     D. HOW IT WORKS
+     ============================================================ -->
+<section id="how-it-works" class="py-24 px-6 bg-dark">
+  <div class="max-w-6xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      The Process
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold text-center mb-16">
+      The 4-Step Autonomous Journey
+    </h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Step 1 -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 relative">
+        <div class="absolute -top-4 left-8 bg-brand-500 text-white text-xs font-bold
+                    px-3 py-1 rounded-full">Step 1</div>
+        <div class="text-4xl mb-4 mt-2">&#128197;</div>
+        <h3 class="text-xl font-bold mb-3 text-brand-400">BOOK</h3>
+        <p class="text-gray-400 text-sm">
+          Employees use our simple mobile app to schedule a morning or evening charging slot.
+          30 seconds, no car moves required.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 relative">
+        <div class="absolute -top-4 left-8 bg-brand-500 text-white text-xs font-bold
+                    px-3 py-1 rounded-full">Step 2</div>
+        <div class="text-4xl mb-4 mt-2">&#129302;</div>
+        <h3 class="text-xl font-bold mb-3 text-brand-400">CHARGE</h3>
+        <p class="text-gray-400 text-sm">
+          VoltBot autonomous robots navigate directly to the vehicle's GPS coordinates,
+          connect via CCS1/CCS2, and deliver up to 25 kWh — all hands-off.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 relative">
+        <div class="absolute -top-4 left-8 bg-brand-500 text-white text-xs font-bold
+                    px-3 py-1 rounded-full">Step 3</div>
+        <div class="text-4xl mb-4 mt-2">&#128202;</div>
+        <h3 class="text-xl font-bold mb-3 text-brand-400">REPORT</h3>
+        <p class="text-gray-400 text-sm">
+          Real-time dashboards display usage data, energy consumed, and carbon reduction
+          metrics — ESG-ready reporting for your sustainability team.
+        </p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 relative">
+        <div class="absolute -top-4 left-8 bg-brand-500 text-white text-xs font-bold
+                    px-3 py-1 rounded-full">Step 4</div>
+        <div class="text-4xl mb-4 mt-2">&#9889;</div>
+        <h3 class="text-xl font-bold mb-3 text-brand-400">GRID SUPPORT</h3>
+        <p class="text-gray-400 text-sm">
+          During peak grid loads, enrolled EVs act as active assets in our Virtual Power Plant.
+          Participants earn <strong class="text-white">$800–$1,200/year</strong> per vehicle.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     E. SEAMLESS INTEGRATION
+     ============================================================ -->
+<section id="integration" class="py-24 px-6 bg-card">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <div>
+      <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-3">
+        Managed End-to-End
+      </p>
+      <h2 class="text-4xl font-bold mb-6">Seamless Integration</h2>
+      <p class="text-gray-400 mb-8">
+        We handle everything so your facilities team never has to think about charging infrastructure
+        again. From day-one deployment to ongoing robot maintenance, every detail is managed by
+        Prezent.Energy.
+      </p>
+      <ul class="space-y-4 text-sm text-gray-300">
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          Equipment procurement, deployment, and maintenance
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          Comprehensive liability insurance on all robots
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          Employee onboarding and app setup
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          24/7 fleet monitoring and remote diagnostics
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          ESG reporting and LCFS credit administration
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/40 flex items-center
+                       justify-center text-brand-400 text-xs flex-shrink-0">&#10003;</span>
+          Dedicated account manager (Corporate & Enterprise)
+        </li>
+      </ul>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-dark border border-white/10 rounded-2xl p-6 text-center">
+        <p class="text-4xl font-extrabold text-brand-400">$0</p>
+        <p class="text-gray-400 text-sm mt-2">CapEx required</p>
+      </div>
+      <div class="bg-dark border border-white/10 rounded-2xl p-6 text-center">
+        <p class="text-4xl font-extrabold text-brand-400">1 wk</p>
+        <p class="text-gray-400 text-sm mt-2">Average time to launch</p>
+      </div>
+      <div class="bg-dark border border-white/10 rounded-2xl p-6 text-center">
+        <p class="text-4xl font-extrabold text-brand-400">100%</p>
+        <p class="text-gray-400 text-sm mt-2">Employee coverage</p>
+      </div>
+      <div class="bg-dark border border-white/10 rounded-2xl p-6 text-center">
+        <p class="text-4xl font-extrabold text-brand-400">25 kWh</p>
+        <p class="text-gray-400 text-sm mt-2">Per session delivered</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     F. PRICING
+     ============================================================ -->
+<section id="pricing" class="py-24 px-6 bg-dark">
+  <div class="max-w-6xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      Plans
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold text-center mb-4">Simple, Transparent Pricing</h2>
+    <p class="text-gray-400 text-center mb-16 max-w-2xl mx-auto">
+      No hidden fees. No long-term contracts required to start.
+      Scale your plan as your fleet grows.
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Starter -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 flex flex-col">
+        <p class="text-gray-400 text-sm font-semibold uppercase tracking-widest mb-2">Starter</p>
+        <p class="text-4xl font-extrabold mb-1">$35 <span class="text-lg font-normal text-gray-400">/ session</span></p>
+        <p class="text-gray-500 text-sm mb-6">Small teams &amp; pilots</p>
+        <ul class="space-y-3 text-sm text-gray-300 flex-1 mb-8">
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> 25 kWh per session</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> Flexible scheduling</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> No commitment required</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> Mobile app access</li>
+        </ul>
+        <a href="#demo"
+           class="border border-brand-500 text-brand-400 hover:bg-brand-500 hover:text-white
+                  text-center py-3 rounded-xl transition-colors font-semibold text-sm">
+          Get Started
+        </a>
+      </div>
+
+      <!-- Corporate — highlighted -->
+      <div class="bg-brand-600 border border-brand-400 rounded-2xl p-8 flex flex-col relative">
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-400 text-dark text-xs
+                    font-bold px-4 py-1 rounded-full uppercase tracking-widest">Most Popular</div>
+        <p class="text-brand-100 text-sm font-semibold uppercase tracking-widest mb-2">Corporate</p>
+        <p class="text-4xl font-extrabold mb-1">$1,400 <span class="text-lg font-normal text-brand-200">/ mo</span></p>
+        <p class="text-brand-200 text-sm mb-6">10+ EV drivers</p>
+        <ul class="space-y-3 text-sm text-white flex-1 mb-8">
+          <li class="flex items-center gap-2"><span class="text-brand-200">&#10003;</span> 40 sessions per month</li>
+          <li class="flex items-center gap-2"><span class="text-brand-200">&#10003;</span> Priority scheduling windows</li>
+          <li class="flex items-center gap-2"><span class="text-brand-200">&#10003;</span> Dedicated account manager</li>
+          <li class="flex items-center gap-2"><span class="text-brand-200">&#10003;</span> Usage &amp; carbon dashboard</li>
+          <li class="flex items-center gap-2"><span class="text-brand-200">&#10003;</span> VPP revenue sharing</li>
+        </ul>
+        <a href="#demo"
+           class="bg-white text-brand-700 hover:bg-brand-50 text-center py-3 rounded-xl
+                  transition-colors font-semibold text-sm">
+          Schedule Demo
+        </a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="bg-card border border-white/10 rounded-2xl p-8 flex flex-col">
+        <p class="text-gray-400 text-sm font-semibold uppercase tracking-widest mb-2">Enterprise</p>
+        <p class="text-4xl font-extrabold mb-1">Custom</p>
+        <p class="text-gray-500 text-sm mb-6">50+ employees</p>
+        <ul class="space-y-3 text-sm text-gray-300 flex-1 mb-8">
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> Dedicated robot infrastructure</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> White-label options</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> Priority 24/7 support</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> Full ESG &amp; LCFS reporting</li>
+          <li class="flex items-center gap-2"><span class="text-brand-400">&#10003;</span> V2G / VPP integration</li>
+        </ul>
+        <a href="#demo"
+           class="border border-brand-500 text-brand-400 hover:bg-brand-500 hover:text-white
+                  text-center py-3 rounded-xl transition-colors font-semibold text-sm">
+          Contact Sales
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     G. MANAGEMENT TEAM
+     ============================================================ -->
+<section id="team" class="py-24 px-6 bg-card">
+  <div class="max-w-6xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      Leadership
+    </p>
+    <h2 class="text-4xl sm:text-5xl font-bold text-center mb-16">Our Management Team</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% set team = [
+        {
+          "name": "Kevin Cameron",
+          "title": "Founder & CTO",
+          "bio": "25+ years in semiconductors and robotics. Architect of the VoltBot autonomous charging platform.",
+          "icon": "&#129302;"
+        },
+        {
+          "name": "Jens Andersen",
+          "title": "Co-CEO",
+          "bio": "Revenue architect and startup specialist. Expert at turning early-stage technology into scalable enterprise solutions.",
+          "icon": "&#128200;"
+        },
+        {
+          "name": "Jean Delphonse",
+          "title": "COO / Co-CEO",
+          "bio": "20+ years in data engineering and scaling tech ventures. Oversees operations and client delivery.",
+          "icon": "&#9881;"
+        },
+        {
+          "name": "Chris Novak",
+          "title": "IP Attorney",
+          "bio": "20+ years specializing in energy licensing and IP protection. Safeguards Prezent.Energy's technology portfolio.",
+          "icon": "&#9878;"
+        }
+      ] %}
+
+      {% for member in team %}
+      <div class="bg-dark border border-white/10 rounded-2xl p-8 text-center">
+        <div class="w-20 h-20 bg-brand-900/50 border border-brand-600/40 rounded-full
+                    flex items-center justify-center text-4xl mx-auto mb-4">
+          {{ member.icon | safe }}
+        </div>
+        <h3 class="text-lg font-bold mb-1">{{ member.name }}</h3>
+        <p class="text-brand-400 text-sm font-semibold mb-3">{{ member.title }}</p>
+        <p class="text-gray-400 text-sm">{{ member.bio }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section id="faq" class="py-24 px-6 bg-dark">
+  <div class="max-w-3xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      FAQ
+    </p>
+    <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+
+    <div id="faq-list" class="space-y-4">
+
+      {% set faqs = [
+        {
+          "q": "Which connectors do VoltBots support?",
+          "a": "VoltBots support CCS1 (Combined Charging System, North America) and CCS2 (European/international standard). No dongle or adapter is required — we use a direct-to-battery DC fast-charge connection."
+        },
+        {
+          "q": "How is thermal management handled during fast charging?",
+          "a": "Our robots monitor battery temperature in real time and communicate with the vehicle's BMS (Battery Management System) via ISO 15118. Charge rates are automatically throttled to stay within OEM safe-charge envelopes, eliminating thermal runaway risk."
+        },
+        {
+          "q": "What is the transition from 'dongle' solutions to direct-to-battery charging?",
+          "a": "Legacy portable charging solutions use aftermarket dongles that limit charge speed and add connector stress. VoltBots use a native CCS plug with ISO 15118-20 digital handshake, enabling full 25 kWh DC sessions and V2X bi-directional communication without any dongle hardware."
+        },
+        {
+          "q": "How quickly can we launch?",
+          "a": "Typical deployment is 5–7 business days from contract signing. We deploy the robots, run a site survey, onboard your drivers on the app, and you're live. No electrical work means no utility coordination delays."
+        },
+        {
+          "q": "What does the Virtual Power Plant (VPP) programme pay?",
+          "a": "Enrolled EV drivers earn $800–$1,200 per vehicle per year by allowing their battery to participate in grid peak-load management. Prezent.Energy handles all utility interconnection and settlement — owners just see a credit."
+        },
+        {
+          "q": "Is V2G (vehicle-to-grid) supported today?",
+          "a": "Yes, for compatible vehicles. Our 2025+ robot fleet is ISO 15118-20 and UL 9741 compliant, supporting bi-directional power flow. We're actively expanding the list of supported vehicle models."
+        },
+        {
+          "q": "Who handles liability if a VoltBot damages a vehicle?",
+          "a": "Prezent.Energy carries comprehensive commercial liability insurance covering all robot operations. Clients have zero exposure."
+        }
+      ] %}
+
+      {% for item in faqs %}
+      <div class="faq-item bg-card border border-white/10 rounded-xl overflow-hidden">
+        <button class="faq-trigger w-full text-left px-6 py-5 flex items-center justify-between
+                       font-semibold text-sm hover:text-brand-400 transition-colors">
+          {{ item.q }}
+          <span class="faq-icon text-brand-400 ml-4 flex-shrink-0 transition-transform">&#43;</span>
+        </button>
+        <div class="faq-answer hidden px-6 pb-5 text-gray-400 text-sm leading-relaxed">
+          {{ item.a }}
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     NEWS / AI AGENT
+     ============================================================ -->
+<section id="news" class="py-24 px-6 bg-card">
+  <div class="max-w-4xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      Live Intelligence
+    </p>
+    <h2 class="text-4xl font-bold text-center mb-4">CaaS News &amp; Regulatory Feed</h2>
+    <p class="text-gray-400 text-center mb-10 max-w-2xl mx-auto">
+      Ask our AI agent about EV infrastructure funding, California LCFS updates, V2X standards,
+      or how new regulations affect your specific site type.
+    </p>
+
+    <div class="bg-dark border border-white/10 rounded-2xl overflow-hidden">
+      <div id="news-messages" class="p-6 space-y-4 min-h-48 text-sm text-gray-300">
+        <p class="text-gray-500 italic">
+          Ask a question like "What are the latest LCFS updates for 2026?" or
+          "How does California SB 100 affect residential EV charging?"
+        </p>
+      </div>
+      <div class="border-t border-white/10 p-4 flex gap-3">
+        <input id="news-input"
+               type="text"
+               placeholder="Ask about CaaS trends, regulations, funding…"
+               class="flex-1 bg-card border border-white/20 rounded-lg px-4 py-3 text-sm text-white
+                      placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        <button id="news-send"
+                class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg text-sm
+                       transition-colors font-medium whitespace-nowrap">
+          Ask Agent
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     H. SCHEDULE DEMO / LEAD FORM
+     ============================================================ -->
+<section id="demo" class="py-24 px-6 bg-dark">
+  <div class="max-w-2xl mx-auto">
+    <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm text-center mb-3">
+      Get Started
+    </p>
+    <h2 class="text-4xl font-bold text-center mb-4">Schedule a Demo</h2>
+    <p class="text-gray-400 text-center mb-12">
+      Tell us about your site. We'll reach out within one business day to walk you through
+      a live VoltBot demonstration.
+    </p>
+
+    <form id="demo-form" class="space-y-6 bg-card border border-white/10 rounded-2xl p-8">
+
+      <!-- Section 1: Primary Contact -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-4">
+          1. Primary Contact
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
+            <input type="text" name="full_name" required
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Email Address *</label>
+            <input type="email" name="email" required
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Phone Number</label>
+            <input type="tel" name="phone"
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Organization -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-4">
+          2. Organization &amp; Industry
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Company / Organization</label>
+            <input type="text" name="company_name"
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Industry Segment</label>
+            <select name="industry_segment"
+                    class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                           text-sm text-white focus:outline-none focus:border-brand-500
+                           appearance-none">
+              <option value="" class="bg-dark">Select segment…</option>
+              <option value="City Vehicle Fleet" class="bg-dark">City Vehicle Fleet</option>
+              <option value="Business Campus / Workplace" class="bg-dark">Business Campus / Workplace</option>
+              <option value="Residential Complex / Multi-Unit Dwelling" class="bg-dark">Residential Complex / MUD</option>
+              <option value="Hotel / Hospitality" class="bg-dark">Hotel / Hospitality</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Operational Data -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-4">
+          3. Operational Data
+        </p>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Fleet Size / # of EVs</label>
+            <input type="text" name="fleet_size" placeholder="e.g. 25"
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Primary Location (Zip)</label>
+            <input type="text" name="location_zip" placeholder="e.g. 94025"
+                   class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                          text-sm text-white placeholder-gray-500 focus:outline-none
+                          focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Current Charging Status</label>
+            <select name="current_charging_status"
+                    class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                           text-sm text-white focus:outline-none focus:border-brand-500
+                           appearance-none">
+              <option value="" class="bg-dark">Select…</option>
+              <option value="Zero Infrastructure" class="bg-dark">Zero Infrastructure</option>
+              <option value="Fixed Chargers (Insufficient)" class="bg-dark">Fixed Chargers (Insufficient)</option>
+              <option value="Planning Phase" class="bg-dark">Planning Phase</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Strategic Interests -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-4">
+          4. Primary Interests <span class="text-gray-500 normal-case font-normal">(select all that apply)</span>
+        </p>
+        <div class="grid sm:grid-cols-2 gap-3 text-sm">
+          {% set interests = [
+            "Employee Productivity / Time Savings",
+            "Virtual Power Plant (VPP) / Grid Support Revenue",
+            "Zero CapEx Subscription (CaaS)",
+            "Carbon Reduction Reporting"
+          ] %}
+          {% for interest in interests %}
+          <label class="flex items-center gap-3 bg-dark border border-white/10 rounded-lg px-4 py-3
+                        cursor-pointer hover:border-brand-500/50 transition-colors">
+            <input type="checkbox" name="primary_interests" value="{{ interest }}"
+                   class="w-4 h-4 accent-green-500" />
+            <span class="text-gray-300">{{ interest }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Section 5: Lead Intent -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-4">
+          5. Implementation Timeline
+        </p>
+        <div class="grid sm:grid-cols-3 gap-3 text-sm mb-4">
+          {% set timelines = ["Within 1 week", "1–3 months", "Budgeting for 2027"] %}
+          {% for tl in timelines %}
+          <label class="flex items-center gap-3 bg-dark border border-white/10 rounded-lg px-4 py-3
+                        cursor-pointer hover:border-brand-500/50 transition-colors">
+            <input type="radio" name="timeline" value="{{ tl }}"
+                   class="w-4 h-4 accent-green-500" />
+            <span class="text-gray-300">{{ tl }}</span>
+          </label>
+          {% endfor %}
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1">
+            Additional Comments / Special Requirements
+          </label>
+          <textarea name="comments" rows="3"
+                    placeholder="e.g. V2X testing, bi-directional hardware, specific site constraints…"
+                    class="form-input w-full bg-dark border border-white/20 rounded-lg px-4 py-3
+                           text-sm text-white placeholder-gray-500 focus:outline-none
+                           focus:border-brand-500 resize-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div id="form-status" class="hidden"></div>
+      <button type="submit"
+              class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-4 rounded-xl
+                     transition-colors text-lg shadow-lg shadow-brand-500/30">
+        Apply to Meet the Team &rarr;
+      </button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
