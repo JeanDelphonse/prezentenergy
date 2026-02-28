@@ -92,6 +92,11 @@
     </div>
   </footer>
 
+  <script>
+    window.API_CHAT  = "{{ url_for('chat.chat') }}";
+    window.API_NEWS  = "{{ url_for('chat.news_query') }}";
+    window.API_LEADS = "{{ url_for('leads.submit_lead') }}";
+  </script>
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 

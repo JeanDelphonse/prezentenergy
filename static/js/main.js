@@ -50,7 +50,7 @@ if (demoForm) {
     submitBtn.textContent = 'Sending…';
 
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(window.API_LEADS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -122,7 +122,7 @@ async function sendNewsQuery() {
   showNewsTyping();
 
   try {
-    const res  = await fetch('/api/news-query', {
+    const res  = await fetch(window.API_NEWS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, history: newsHistory.slice(0, -1) }),

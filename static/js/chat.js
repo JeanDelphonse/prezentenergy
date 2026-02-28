@@ -76,7 +76,7 @@ async function sendChatMessage() {
   showTyping();
 
   try {
-    const res  = await fetch('/api/chat', {
+    const res  = await fetch(window.API_CHAT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: chatHistory }),
