@@ -86,9 +86,9 @@ async function sendChatMessage() {
     const reply = json.reply || json.error || 'No response.';
     appendBotMessage(reply);
     chatHistory.push({ role: 'assistant', content: reply });
-  } catch {
+  } catch (err) {
     removeTyping();
-    appendBotMessage('Service temporarily unavailable. Please email info@prezent.energy for immediate assistance.');
+    appendBotMessage('Error: ' + (err && err.message ? err.message : 'fetch failed') + ' — URL: ' + window.API_CHAT);
   } finally {
     chatSend.disabled = false;
     chatInput.focus();

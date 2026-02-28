@@ -1,5 +1,7 @@
 import sys, os, traceback
-sys.path.insert(0, os.path.dirname(__file__))                                                                                        
+_here = os.path.dirname(__file__)
+sys.path.insert(0, _here)
+sys.path.insert(0, os.path.join(_here, "vendor"))                                                                                        
   
 try:
     from app import create_app

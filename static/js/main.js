@@ -132,9 +132,9 @@ async function sendNewsQuery() {
     const answer = json.answer || json.error || 'No response received.';
     appendNewsMessage(answer, 'agent');
     newsHistory.push({ role: 'assistant', content: answer });
-  } catch {
+  } catch (err) {
     removeNewsTyping();
-    appendNewsMessage('Service temporarily unavailable. Please try again shortly.', 'agent');
+    appendNewsMessage('Error: ' + (err && err.message ? err.message : 'fetch failed') + ' — URL: ' + window.API_NEWS, 'agent');
   } finally {
     newsSend.disabled = false;
     newsInput.focus();

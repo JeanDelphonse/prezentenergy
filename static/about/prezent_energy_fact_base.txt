@@ -1,0 +1,153 @@
+Prezent.Energy — Fact Base
+==========================
+Last updated: 2026-02-28
+
+## Company Overview
+
+Prezent.Energy is a technology firm delivering ubiquitous, accessible EV charging through an
+"infrastructure-lite" on-demand model. Instead of requiring vehicles to find a charger, the company
+sends autonomous VoltBot robots directly to parked vehicles. Primary market segments:
+
+  - City Vehicle Fleets
+  - Business Campuses / Workplaces
+  - Residential Complexes / Multi-Unit Dwellings (MUDs)
+  - Hotels / Hospitality
+
+## Charging-as-a-Service (CaaS) Model
+
+Clients launch professional EV charging in as little as one week with zero capital expenditure —
+no electrical work, no permitting, no fixed infrastructure.
+
+Comparison vs. traditional fixed chargers:
+  - Old way: $50,000–$500,000 per station, 6–12 month installation
+  - Prezent way: $0 upfront, 1-week launch, 100% lot coverage
+
+Employee productivity recovered: 90–130 hours per year by eliminating the "charging shuffle."
+
+Market context: 36% of Americans in multi-unit housing currently lack access to EV charging.
+
+## Pricing
+
+  Starter     $35 / session    Small teams / pilots
+               - 25 kWh per session (~80–100 miles)
+               - Flexible scheduling, no long-term commitment
+
+  Corporate   $1,400 / month   10+ EV drivers
+               - 40 sessions per month
+               - Priority scheduling windows
+               - Dedicated account manager + sustainability reporting
+
+  Enterprise  Custom           50+ employees
+               - Dedicated infrastructure
+               - White-label options
+               - Priority support
+
+## Technology — VoltBot Hardware
+
+Primary unit: Gotion Gen2-EPLVS
+  - Battery capacity: 184.32 kWh
+  - DC output: 60 kW maximum
+  - Autonomous navigation speed: 5 km/h
+  - Obstacle detection: clears 70 mm deceleration belts
+  - Connector support: CCS1 (North America), CCS2 (Europe/international), GBT (China)
+  - Charging standard: DC Fast Charging
+
+Supplemental / manual-phase units:
+  - BLUETTI Elite 400 (3,840 Wh capacity)
+  - Apex 300
+
+Dongle transition: Currently ships with an interim dongle solution for legacy vehicles.
+Roadmap target is direct-to-battery CCS connections (no aftermarket adapters) and
+VTH/G Bi-directional Smart Meter Adapters launching in 2027.
+
+Thermal management: Active cooling protocols monitor battery temperature in real time and
+throttle charge rate to stay within OEM safe-charge envelopes. No thermal runaway risk.
+
+## Operational Workflow (4-Step Autonomous Journey)
+
+  1. BOOK        — Employees or fleet managers schedule morning/evening slots via mobile app.
+  2. CHARGE      — VoltBot navigates autonomously to the vehicle's GPS coordinates and delivers
+                   fast charging with no user effort.
+  3. REPORT      — Real-time dashboard shows usage, satisfaction scores, and carbon reduction.
+  4. GRID SUPPORT — Connected units participate in Virtual Power Plant (VPP) networks to
+                   stabilize the grid during peak loads.
+
+## Virtual Power Plant (VPP) & V2X
+
+A VPP is an intelligent network linking EVs, solar panels, and batteries to act as a single
+distributed power plant.
+
+  V2G (Vehicle-to-Grid): Power sent from EV battery back to the utility grid for stability.
+  V2H (Vehicle-to-Home): EV powers a home during peak rates or outages.
+  V2L (Vehicle-to-Load): EV powers specific tools or appliances.
+
+Governing standards: ISO 15118-20 (communication), UL 9741 (safety).
+V2G hardware is compliant in the 2025+ VoltBot fleet; revenue sharing is live for compatible vehicles.
+
+Financial benefit: V2G participants earn $800–$1,200 per vehicle per year in grid support revenue.
+
+Strategic goal: By 2029, Prezent.Energy aims to operate as a full energy company using VoltBots
+as hubs for solar-to-home-to-grid transitions, displacing nighttime utility energy use.
+
+## V2X Roadmap
+
+  2025  V2G pilot — 500 vehicles across Silicon Valley campuses
+  2026  Full VPP integration with PG&E and SCE
+  2027  National rollout — 10,000-vehicle fleet; VTH/G Bi-directional Smart Meter Adapters launch
+  2029  Full energy company status with grid-scale VPP operations
+
+## Service Area
+
+Initial territory: Silicon Valley (San Jose, Palo Alto, Mountain View, Sunnyvale, Santa Clara).
+2026 expansion planned: LA Basin and Pacific Northwest.
+
+## Regulatory & Market Context
+
+  CA SB 100            100% renewable electricity goal by 2045. VoltBot V2G fleet stores and
+                       dispatches renewable energy in support.
+
+  LCFS 2026            Clients earn Low Carbon Fuel Standard credits for every kWh delivered.
+
+  CARB / EVSE          Prezent navigates all applicable incentive programs on behalf of clients.
+
+  ISO 15118-20         V2X communication standard; all 2025+ units are compliant.
+
+  UL 9741              Bidirectional charging safety standard; all 2025+ units are compliant.
+
+  EV market share      10.9% nationally as of July 2025; 30% of new vehicle sales in PG&E
+                       service territories.
+
+  Gasoline CO2         Gasoline consumption accounts for ~15% of global CO2 emissions.
+
+  Market forecast      Portable DC Fast Charger market projected at USD 633M by 2033.
+
+## Management Team
+
+  Kevin Cameron    Founder & CTO       25+ years in semiconductors, power systems, and
+                                       autonomous robotics.
+
+  Jens Andersen    Co-CEO              Revenue architect with extensive experience scaling
+                                       deep-tech startups.
+
+  Jean Delphonse   COO / Co-CEO        20+ years in data engineering and business development.
+
+  Chris Novak      IP Attorney         20+ years specializing in energy, hardware, and licensing.
+
+Internal org units: Operations, Finance, Marketing, Engineering, Technology.
+
+## Key Numbers at a Glance
+
+  $0              Upfront infrastructure investment
+  1 week          Time to launch vs. 6–12 months for fixed chargers
+  100%            Employee lot coverage
+  90–130 hrs      Annual productivity returned per employee
+  $800–$1,200     Annual V2G revenue per vehicle
+  36%             Americans in MUDs without charging access
+  $633M           Portable DC fast charger market by 2033
+  10.9%           U.S. EV market share (July 2025)
+
+## Contact
+
+  Web    www.prezent.energy
+  Phone  (408) 758-8293
+  Email  info@prezent.energy

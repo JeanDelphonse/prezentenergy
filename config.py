@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+# Use absolute path so dotenv finds .env regardless of Passenger's working directory
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 
 class Config:
@@ -9,6 +10,11 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///leads.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+    # Prevent "MySQL server has gone away" on long-idle connections
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_recycle": 280,
+        "pool_pre_ping": True,
+    }
 
 
 class DevelopmentConfig(Config):
