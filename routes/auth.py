@@ -1,4 +1,5 @@
 import random
+import socket
 import string
 from datetime import datetime, timedelta
 
@@ -54,11 +55,15 @@ def send_verification_code(user, purpose):
             f"— The Prezent.Energy Team"
         ),
     )
+    old_timeout = socket.getdefaulttimeout()
     try:
+        socket.setdefaulttimeout(10)
         mail.send(msg)
         return code, None
     except Exception as e:
         return code, str(e)
+    finally:
+        socket.setdefaulttimeout(old_timeout)
 
 
 def _validate_code(user_id, purpose, submitted_code):
