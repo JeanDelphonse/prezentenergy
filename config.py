@@ -16,13 +16,13 @@ class Config:
         "pool_pre_ping": True,
     }
     # Flask-Mail (Gmail + App Password)
-    # cPanel Exim local MTA — no auth, works from localhost on GoDaddy shared hosting
+    # cPanel Exim local MTA — no auth needed for localhost
     MAIL_SERVER = os.getenv("MAIL_SERVER", "localhost")
     MAIL_PORT = int(os.getenv("MAIL_PORT", "25"))
     MAIL_USE_TLS = False
     MAIL_USE_SSL = False
-    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_USERNAME = None
+    MAIL_PASSWORD = None
     MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
 
 
