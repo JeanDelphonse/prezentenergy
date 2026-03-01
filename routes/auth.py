@@ -57,7 +57,7 @@ def send_verification_code(user, purpose):
     server = current_app.config.get("MAIL_SERVER", "localhost")
     port = int(current_app.config.get("MAIL_PORT", 25))
 
-    mime = MIMEText(body)
+    mime = MIMEText(body, "plain", "utf-8")
     mime["Subject"] = subject
     mime["From"] = sender
     mime["To"] = user.email
