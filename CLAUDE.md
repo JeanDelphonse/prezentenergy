@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Goal
 
-Build the **Prezent.Energy** marketing and lead-generation website as specified in `prd.txt`. The site targets three B2B segments: City Vehicle Fleets, Business Campuses, and Residential Complexes.
+Build the **Prezent.Energy** marketing and lead-generation website as specified in `docs/prd.txt`. The site targets three B2B segments: City Vehicle Fleets, Business Campuses, and Residential Complexes.
 
 ## Tech Stack
 
@@ -48,6 +48,8 @@ prezentenergy/
 ├── app.py               # Flask app factory and route registration
 ├── models.py            # SQLAlchemy models (Lead)
 ├── config.py            # Environment-based config (dev/prod)
+├── docs/
+│   └── prd.txt          # Product requirements document
 ├── requirements.txt
 ├── .env                 # API keys, DB path (never commit)
 ├── static/
