@@ -38,18 +38,18 @@
   <!-- Nav -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="#hero" class="flex items-center">
+      <a href="{{ url_for('main.index') }}#hero" class="flex items-center">
         <img src="{{ url_for('static', filename='images/prezen_logo.webp') }}"
              alt="Prezent.Energy"
              class="h-10 w-auto" />
       </a>
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="#voltbot-video" class="hover:text-brand-400 transition-colors">Watch Demo</a>
-        <a href="#how-it-works" class="hover:text-brand-400 transition-colors">How It Works</a>
-        <a href="#pricing"      class="hover:text-brand-400 transition-colors">Pricing</a>
-        <a href="#team"         class="hover:text-brand-400 transition-colors">Team</a>
-        <a href="#faq"          class="hover:text-brand-400 transition-colors">FAQ</a>
-        <a href="#news"         class="hover:text-brand-400 transition-colors">News</a>
+        <a href="{{ url_for('main.index') }}#voltbot-video" class="hover:text-brand-400 transition-colors">Watch Demo</a>
+        <a href="{{ url_for('main.index') }}#how-it-works"  class="hover:text-brand-400 transition-colors">How It Works</a>
+        <a href="{{ url_for('main.index') }}#pricing"       class="hover:text-brand-400 transition-colors">Pricing</a>
+        <a href="{{ url_for('main.index') }}#team"          class="hover:text-brand-400 transition-colors">Team</a>
+        <a href="{{ url_for('main.index') }}#faq"           class="hover:text-brand-400 transition-colors">FAQ</a>
+        <a href="{{ url_for('main.index') }}#news"          class="hover:text-brand-400 transition-colors">News</a>
         {% if current_user.is_authenticated %}
           <a href="{{ url_for('auth.account') }}" class="hover:text-brand-400 transition-colors">Account</a>
           <form method="POST" action="{{ url_for('auth.logout') }}" class="inline">
@@ -62,7 +62,7 @@
         {% else %}
           <a href="{{ url_for('auth.login') }}" class="hover:text-brand-400 transition-colors">Sign In</a>
         {% endif %}
-        <a href="#demo"
+        <a href="{{ url_for('main.index') }}#demo"
            class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg transition-colors">
           Schedule Demo
         </a>
@@ -84,10 +84,10 @@
       <div>
         <p class="font-semibold text-white mb-2">Quick Links</p>
         <ul class="space-y-1">
-          <li><a href="#how-it-works" class="hover:text-brand-400">How It Works</a></li>
-          <li><a href="#pricing"      class="hover:text-brand-400">Pricing</a></li>
-          <li><a href="#faq"          class="hover:text-brand-400">FAQ</a></li>
-          <li><a href="#demo"         class="hover:text-brand-400">Schedule Demo</a></li>
+          <li><a href="{{ url_for('main.index') }}#how-it-works" class="hover:text-brand-400">How It Works</a></li>
+          <li><a href="{{ url_for('main.index') }}#pricing"      class="hover:text-brand-400">Pricing</a></li>
+          <li><a href="{{ url_for('main.index') }}#faq"          class="hover:text-brand-400">FAQ</a></li>
+          <li><a href="{{ url_for('main.index') }}#demo"         class="hover:text-brand-400">Schedule Demo</a></li>
         </ul>
       </div>
       <div>
