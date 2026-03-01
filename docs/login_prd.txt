@@ -1,0 +1,53 @@
+This Feature Requirement Document (FRD) outlines the specifications for implementing a secure user authentication and management system for the Prezent Energy platform. As the company transitions from Phase 0 into pilot execution, this system will serve as the foundational gateway for fleet managers and corporate employees to access Charging-as-a-Service (CaaS) features.
+
+--------------------------------------------------------------------------------
+1. Project Overview
+Objective: To implement a robust, secure, and user-friendly authentication system that allows clients to create accounts, verify their identity via Two-Factor Authentication (2FA), and manage their organizational profiles.
+
+--------------------------------------------------------------------------------
+2. User Profiles
+Corporate Fleet Managers: Responsible for overseeing charging sessions for company vehicles.
+Business Campus Employees: Individual EV owners utilizing the "Park Anywhere, Charge Anywhere" service.
+Property Managers: Managing charging amenities for residential complexes.
+
+--------------------------------------------------------------------------------
+3. Functional Requirements
+3.1 Account Creation (Registration)
+The system must provide a dedicated "Create Account" page designed with the "frictionless" UI aesthetic preferred by Silicon Valley enterprise clients.
+Data Capture Fields:
+Full Name: User's first and last name.
+Email (Sign-In ID): Must be validated as a unique identifier.
+Address: Physical or billing address associated with the user or organization.
+Organization: The name of the city fleet, corporate campus (e.g., FAANG), or residential complex.
+Primary Phone Number: For urgent operational contact.
+Additional Information: A freeform text field ("What else would you like to share?") to capture specific site needs or V2X interests.
+Action: Upon submission, the system must trigger an initial verification email.
+3.2 Authentication & Verification (2FA)
+To ensure the security of grid-connected assets and personal data, email-based 2FA is mandatory.
+Process: After entering credentials, the system sends a time-sensitive verification code to the registered email.
+Login ID: The user's Email address serves as the primary Sign-In ID.
+3.3 Account Settings & Profile Management
+Users must have a secure portal to manage their information.
+Update Information: Users can edit any of the primary data fields (Full Name, Address, Organization, Phone).
+Security Gate: Any attempt to save changes in Account Settings must require a new 2-Factor Authorization code sent to the email on file to prevent unauthorized profile hijacking.
+3.4 Session Management (Logout)
+Function: A clear "Logout" option must be available on all authenticated pages.
+Security: Logging out must immediately terminate the session and redirect the user to the landing page.
+
+--------------------------------------------------------------------------------
+4. Technical Specifications & Backend
+Database: As established in the website requirement document, all captured user data and authentication logs must be stored in a MySQL database for ease of maintenance during the Phase 1 launch.
+Security Standards: While hardware follows UL 9741, the web platform should align with standard cybersecurity best practices for Distributed Energy Resources (DERs) to ensure interoperability and data integrity.
+Infrastructure Integration: The authentication system must be scalable to eventually support the VoltBot management dashboard, allowing users to view their 130-hour productivity savings and carbon reduction reports.
+
+--------------------------------------------------------------------------------
+5. User Interface (UI) Considerations
+Futuristic Aesthetic: The authentication pages should match the high-tech branding of the VoltBot autonomous robot.
+Clarity: Use clean, professional layouts that emphasize "Zero-Hassle" entry, consistent with the company's mission to simplify the EV charging experience.
+Accessibility: Ensure the 2FA prompts are clear and provide immediate feedback if a code is expired or incorrect.
+
+--------------------------------------------------------------------------------
+6. Success Metrics
+Onboarding Speed: Users should be able to move from the "Create Account" page to a verified state in under 2 minutes.
+Security Integrity: Zero unauthorized account changes.
+Lead Conversion: Successful capture of "Organization" and "Freeform" data to help the CEO refine financial models for CaaS tiers

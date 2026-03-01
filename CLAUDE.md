@@ -49,7 +49,8 @@ prezentenergy/
 ├── models.py            # SQLAlchemy models (Lead)
 ├── config.py            # Environment-based config (dev/prod)
 ├── docs/
-│   └── prd.txt          # Product requirements document
+│   ├── prd.txt          # Website requirements — sections, copy, lead form, chatbot, news agent
+│   └── login_prd.txt    # Auth system FRD — registration, 2FA, profile management, session
 ├── requirements.txt
 ├── .env                 # API keys, DB path (never commit)
 ├── static/
