@@ -18,7 +18,10 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 # ---------------------------------------------------------------------------
 
 def send_verification_code(user, purpose):
-    """Generate a 6-digit code, persist it, and email it to the user."""
+    """Generate a 6-digit code, persist it, and email it to the user.
+
+    Returns (code, error_message). error_message is None on success.
+    """
     code = "".join(random.choices(string.digits, k=6))
     expires_at = datetime.utcnow() + timedelta(minutes=10)
 
@@ -51,7 +54,11 @@ def send_verification_code(user, purpose):
             f"— The Prezent.Energy Team"
         ),
     )
-    mail.send(msg)
+    try:
+        mail.send(msg)
+        return code, None
+    except Exception as e:
+        return code, str(e)
 
 
 def _validate_code(user_id, purpose, submitted_code):
@@ -120,7 +127,12 @@ def register_post():
     db.session.add(user)
     db.session.commit()
 
-    send_verification_code(user, "register")
+    _, mail_err = send_verification_code(user, "register")
+    if mail_err:
+        db.session.delete(user)
+        db.session.commit()
+        flash(f"Could not send verification email: {mail_err}", "error")
+        return redirect(url_for("auth.register"))
     session["pending_user_id"] = user.id
     session["verify_purpose"] = "register"
     return redirect(url_for("auth.verify"))
@@ -218,7 +230,10 @@ def login_post():
         flash("Invalid email or password.", "error")
         return redirect(url_for("auth.login"))
 
-    send_verification_code(user, "login")
+    _, mail_err = send_verification_code(user, "login")
+    if mail_err:
+        flash(f"Could not send verification email: {mail_err}", "error")
+        return redirect(url_for("auth.login"))
     session["pending_user_id"] = user.id
     session["verify_purpose"] = "login"
     return redirect(url_for("auth.verify"))
@@ -266,7 +281,10 @@ def account_post():
         "additional_info": additional_info,
         "new_password": new_password if new_password else None,
     }
-    send_verification_code(current_user, "settings")
+    _, mail_err = send_verification_code(current_user, "settings")
+    if mail_err:
+        flash(f"Could not send verification email: {mail_err}", "error")
+        return redirect(url_for("auth.account"))
     session["pending_user_id"] = current_user.id
     session["verify_purpose"] = "settings"
     return redirect(url_for("auth.verify"))
