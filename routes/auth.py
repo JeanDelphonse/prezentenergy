@@ -1,14 +1,15 @@
 import random
+import smtplib
 import socket
 import string
 from datetime import datetime, timedelta
+from email.mime.text import MIMEText
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, current_app, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_mail import Message
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from extensions import db, mail
+from extensions import db
 from models import User, VerificationCode
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -55,15 +56,21 @@ def send_verification_code(user, purpose):
             f"— The Prezent.Energy Team"
         ),
     )
-    old_timeout = socket.getdefaulttimeout()
+    sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
+    server = current_app.config.get("MAIL_SERVER", "localhost")
+    port = int(current_app.config.get("MAIL_PORT", 25))
+
+    mime = MIMEText(msg.body)
+    mime["Subject"] = msg.subject
+    mime["From"] = sender
+    mime["To"] = user.email
+
     try:
-        socket.setdefaulttimeout(10)
-        mail.send(msg)
+        with smtplib.SMTP(server, port, timeout=10) as smtp:
+            smtp.sendmail(sender, [user.email], mime.as_string())
         return code, None
     except Exception as e:
         return code, str(e)
-    finally:
-        socket.setdefaulttimeout(old_timeout)
 
 
 def _validate_code(user_id, purpose, submitted_code):
