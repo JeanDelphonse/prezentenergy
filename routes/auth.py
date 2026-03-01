@@ -44,24 +44,21 @@ def send_verification_code(user, purpose):
     }
     label = purpose_labels.get(purpose, "verify your identity")
 
-    msg = Message(
-        subject="Prezent.Energy — Your verification code",
-        recipients=[user.email],
-        body=(
-            f"Hi {user.full_name},\n\n"
-            f"Your one-time verification code to {label} is:\n\n"
-            f"    {code}\n\n"
-            f"This code expires in 10 minutes. If you did not request this, "
-            f"please ignore this email.\n\n"
-            f"— The Prezent.Energy Team"
-        ),
+    subject = "Prezent.Energy — Your verification code"
+    body = (
+        f"Hi {user.full_name},\n\n"
+        f"Your one-time verification code to {label} is:\n\n"
+        f"    {code}\n\n"
+        f"This code expires in 10 minutes. If you did not request this, "
+        f"please ignore this email.\n\n"
+        f"— The Prezent.Energy Team"
     )
     sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
     server = current_app.config.get("MAIL_SERVER", "localhost")
     port = int(current_app.config.get("MAIL_PORT", 25))
 
-    mime = MIMEText(msg.body)
-    mime["Subject"] = msg.subject
+    mime = MIMEText(body)
+    mime["Subject"] = subject
     mime["From"] = sender
     mime["To"] = user.email
 
