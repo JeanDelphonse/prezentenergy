@@ -16,15 +16,14 @@ class Config:
         "pool_pre_ping": True,
     }
     # Flask-Mail (Gmail + App Password)
-    # GoDaddy shared hosting relay — no auth needed, works from cPanel servers
-    MAIL_SERVER = os.getenv("MAIL_SERVER", "relay-hosting.secureserver.net")
+    # cPanel Exim local MTA — no auth, works from localhost on GoDaddy shared hosting
+    MAIL_SERVER = os.getenv("MAIL_SERVER", "localhost")
     MAIL_PORT = int(os.getenv("MAIL_PORT", "25"))
     MAIL_USE_TLS = False
     MAIL_USE_SSL = False
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", "noreply@prezent.energy")
-    MAIL_TIMEOUT = 10
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
 
 
 class DevelopmentConfig(Config):
