@@ -51,7 +51,7 @@ def send_verification_code(user, purpose):
         f"    {code}\n\n"
         f"This code expires in 10 minutes. If you did not request this, "
         f"please ignore this email.\n\n"
-        f"— The Prezent.Energy Team"
+        f"- The Prezent.Energy Team"
     )
     sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
     server = current_app.config.get("MAIL_SERVER", "localhost")
