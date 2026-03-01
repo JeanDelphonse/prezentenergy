@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Sign In — Prezent.Energy{% endblock %}
+
+{% block content %}
+<main class="min-h-screen flex items-center justify-center px-4 pt-24 pb-16">
+  <div class="w-full max-w-sm">
+    <div class="bg-card border border-white/10 rounded-2xl p-8 shadow-2xl">
+
+      <h1 class="text-2xl font-bold text-white mb-2">Sign in</h1>
+      <p class="text-gray-400 text-sm mb-8">
+        Don't have an account?
+        <a href="{{ url_for('auth.register') }}" class="text-brand-400 hover:text-brand-300 transition-colors">Create one</a>
+      </p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="mb-4 px-4 py-3 rounded-lg text-sm
+            {{ 'bg-red-900/40 border border-red-500/40 text-red-300' if category == 'error' else 'bg-brand-900/40 border border-brand-500/40 text-brand-300' }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('auth.login_post') }}" class="space-y-5">
+
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1" for="email">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="email"
+                 class="w-full bg-dark border border-white/20 rounded-lg px-3 py-2 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500"
+                 placeholder="jane@company.com" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-400 mb-1" for="password">Password</label>
+          <input id="password" name="password" type="password" required autocomplete="current-password"
+                 class="w-full bg-dark border border-white/20 rounded-lg px-3 py-2 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500"
+                 placeholder="Your password" />
+        </div>
+
+        <button type="submit"
+                class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3 rounded-lg
+                       transition-colors text-sm">
+          Send Verification Code
+        </button>
+
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

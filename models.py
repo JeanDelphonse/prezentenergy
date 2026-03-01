@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_login import UserMixin
 from extensions import db
 
 
@@ -52,3 +53,34 @@ class Lead(db.Model):
             "comments": self.comments,
             "created_at": self.created_at.isoformat(),
         }
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
+    address = db.Column(db.String(255), nullable=True)
+    organization = db.Column(db.String(150), nullable=True)
+    phone = db.Column(db.String(30), nullable=True)
+    additional_info = db.Column(db.Text, nullable=True)
+    is_verified = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    verification_codes = db.relationship(
+        "VerificationCode", backref="user", lazy=True, cascade="all, delete-orphan"
+    )
+
+
+class VerificationCode(db.Model):
+    __tablename__ = "verification_codes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    code = db.Column(db.String(6), nullable=False)
+    # purpose: 'register' | 'login' | 'settings'
+    purpose = db.Column(db.String(20), nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used = db.Column(db.Boolean, default=False, nullable=False)

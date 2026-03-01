@@ -15,6 +15,13 @@ class Config:
         "pool_recycle": 280,
         "pool_pre_ping": True,
     }
+    # Flask-Mail (Gmail + App Password)
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
 
 
 class DevelopmentConfig(Config):
