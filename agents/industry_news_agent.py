@@ -31,7 +31,7 @@ def _strip_html(text: str) -> str:
     return re.sub(r"<[^>]+>", "", text or "").strip()
 
 
-def _parse_rss(url: str, limit: int = 15) -> list[dict]:
+def _parse_rss(url: str, limit: int = 20) -> list[dict]:
     """Fetch an RSS feed and return a list of article dicts."""
     try:
         r = requests.get(
@@ -64,7 +64,7 @@ def _fetch_federal_register() -> list[dict]:
             params={
                 "conditions[term]": "electric vehicle charging",
                 "conditions[type][]": ["RULE", "PROPOSED_RULE", "NOTICE"],
-                "per_page": 15,
+                "per_page": 25,
                 "order": "newest",
             },
             timeout=10,
@@ -176,8 +176,8 @@ def get_industry_news(force_refresh: bool = False) -> tuple[list[dict], list[dic
     raw_regs = _fetch_federal_register()
 
     # ── curate with Claude ────────────────────────────────────────────────────
-    news_items = _curate_with_claude(raw_news, "news", 5)
-    reg_items = _curate_with_claude(raw_regs, "regulations", 5)
+    news_items = _curate_with_claude(raw_news, "news", 10)
+    reg_items = _curate_with_claude(raw_regs, "regulations", 10)
 
     # ── store in cache ────────────────────────────────────────────────────────
     _cache["news"] = news_items
