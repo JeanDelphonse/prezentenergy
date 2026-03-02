@@ -43,6 +43,9 @@ def create_app(config_name=None):
 
         db.create_all()
 
+        from agents.industry_news_agent import warm_up as warm_up_news
+        warm_up_news()
+
     return app
 
 
