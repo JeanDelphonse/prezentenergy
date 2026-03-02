@@ -72,6 +72,41 @@ class User(UserMixin, db.Model):
     verification_codes = db.relationship(
         "VerificationCode", backref="user", lazy=True, cascade="all, delete-orphan"
     )
+    ev_users = db.relationship(
+        "EVUser", backref="owner", lazy=True, cascade="all, delete-orphan"
+    )
+
+
+class EVUser(db.Model):
+    __tablename__ = "ev_users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    # Client account that owns this record
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    # Driver details
+    full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+
+    # Vehicle details
+    car_make = db.Column(db.String(60), nullable=False)
+    car_model = db.Column(db.String(60), nullable=False)
+    license_plate = db.Column(db.String(30), nullable=False)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "full_name": self.full_name,
+            "email": self.email,
+            "phone": self.phone,
+            "car_make": self.car_make,
+            "car_model": self.car_model,
+            "license_plate": self.license_plate,
+            "created_at": self.created_at.isoformat(),
+        }
 
 
 class VerificationCode(db.Model):

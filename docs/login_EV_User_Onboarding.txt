@@ -1,0 +1,39 @@
+Product Requirement Document: EV User Onboarding & Management
+Project Overview This document specifies the requirements for the EV User Onboarding module within the Prezent Energy platform. This feature is a critical component of the Charging-as-a-Service (CaaS) model, allowing organizational clients (such as corporate campuses and city fleets) to manage the specific vehicles authorized for autonomous robotic charging.
+
+--------------------------------------------------------------------------------
+1. User Access & UI Placement
+Authentication Requirement: Access to this feature is strictly limited to authenticated users who have successfully completed the Sign In and 2-Factor Authorization process [Conversation History].
+Navigation Path: The feature must be located within the "User or Client Settings" pull-down menu in the primary navigation header.
+Visual Design: The interface must maintain the futuristic, "frictionless" aesthetic of the VoltBot brand, emphasizing ease of use for busy facilities managers and fleet operators [342, Conversation History].
+
+--------------------------------------------------------------------------------
+2. Functional Requirements
+2.1 EV User Onboarding (Create)
+Clients must have the ability to onboard one or more individual EV users.
+Data Fields: The onboarding form must capture the following mandatory attributes:
+Full Name: First and last name of the driver.
+Email: Unique identifier for session notifications.
+Phone Number: For urgent operational support.
+Car Make: (e.g., Tesla, Rivian, Ford).
+Car Model: (e.g., Model 3, R1T, F-150 Lightning).
+License Plate Number: Critical for the VoltBot's autonomous identification and location protocol in the parking lot.
+2.2 EV User Management Dashboard (Read)
+Tabular Format: Upon selecting "EV Users" from the settings menu, the client is presented with a comprehensive table listing all onboarded users and their vehicle details.
+Sorting & Filtering: The table should allow sorting by "Full Name" or "License Plate Number" to facilitate management of large fleets (e.g., Corporate Plans with 10+ drivers or Enterprise Solutions with 50+ employees).
+2.3 Record Actions (Edit, Save, Delete)
+Clients must be able to manage individual records directly from the tabular view:
+Edit: Selecting "Edit" opens the attributes for modification (e.g., if an employee updates their vehicle or license plate).
+Save: Commits changes to the record.
+Delete: Removes the user and vehicle from the authorized charging list. A confirmation dialogue ("Are you sure you want to remove this user?") is required to prevent accidental deletion.
+
+--------------------------------------------------------------------------------
+3. Technical Specifications
+Database Integration: All EV user data must be stored in the established SQLite database [Conversation History].
+Operational Sync: Onboarded vehicle data must sync with the Intelligent Management Platform, allowing the VoltBot to autonomously navigate to and identify the correct vehicles for scheduled charging sessions.
+Security: As specified in previous requirements, any administrative changes to user lists must be logged for auditing and protected by the platform's core security framework [Conversation History].
+
+--------------------------------------------------------------------------------
+4. Strategic Context
+This management tool directly supports Prezent Energy’s value proposition of saving employees 90–130 hours annually. By maintaining an accurate, up-to-date registry of authorized vehicles, the platform ensures that the "power comes to the car" with zero effort from the individual driver, eliminating the need for manual "charging shuffles".
+For Corporate Plan clients paying $1,400 per month, this tabular management interface provides the "Transparent Analytics" and "Professional Service" guaranteed in the CaaS subscription

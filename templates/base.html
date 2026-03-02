@@ -51,7 +51,26 @@
         <a href="{{ url_for('main.index') }}#faq"           class="hover:text-brand-400 transition-colors">FAQ</a>
         <a href="{{ url_for('news.news_page') }}"            class="hover:text-brand-400 transition-colors">News</a>
         {% if current_user.is_authenticated %}
-          <a href="{{ url_for('auth.account') }}" class="hover:text-brand-400 transition-colors">Account</a>
+          <!-- Settings dropdown -->
+          <div class="relative group">
+            <button class="flex items-center gap-1 hover:text-brand-400 transition-colors">
+              Settings <span class="text-xs">&#9660;</span>
+            </button>
+            <div class="absolute right-0 top-full mt-2 w-48 bg-card border border-white/20 rounded-xl
+                        shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                        transition-all duration-150 z-50 py-1">
+              <a href="{{ url_for('auth.account') }}"
+                 class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5
+                        transition-colors">
+                Account
+              </a>
+              <a href="{{ url_for('ev_users.dashboard') }}"
+                 class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5
+                        transition-colors">
+                &#9889; EV Users
+              </a>
+            </div>
+          </div>
           <form method="POST" action="{{ url_for('auth.logout') }}" class="inline">
             <button type="submit"
                     class="border border-white/20 hover:border-brand-400 text-gray-300 hover:text-brand-400

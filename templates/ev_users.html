@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% block title %}EV Fleet Management — Prezent.Energy{% endblock %}
+
+{% block content %}
+<div class="pt-24 pb-16 min-h-screen bg-dark px-6">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Page header -->
+    <div class="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+      <div>
+        <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-2">
+          Client Settings
+        </p>
+        <h1 class="text-4xl font-extrabold">EV Fleet Management</h1>
+        <p class="text-gray-400 mt-2 max-w-xl">
+          Manage the vehicles authorized for autonomous VoltBot charging in your lot.
+          The VoltBot uses license plates to identify and navigate to each vehicle.
+        </p>
+      </div>
+      <button onclick="openAddModal()"
+              class="flex-shrink-0 bg-brand-500 hover:bg-brand-600 text-white font-semibold
+                     px-6 py-3 rounded-xl transition-colors flex items-center gap-2">
+        <span class="text-lg">&#43;</span> Add EV User
+      </button>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="mb-6 px-5 py-4 rounded-xl text-sm font-medium
+                    {{ 'bg-brand-600/20 border border-brand-500/40 text-brand-300' if category == 'success'
+                       else 'bg-red-900/30 border border-red-500/40 text-red-300' }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- Sort controls -->
+    <div class="flex items-center gap-4 mb-6 text-sm text-gray-400">
+      <span>Sort by:</span>
+      <a href="{{ url_for('ev_users.dashboard', sort='full_name') }}"
+         class="px-4 py-1.5 rounded-lg border transition-colors
+                {{ 'border-brand-500 text-brand-400 bg-brand-500/10' if sort == 'full_name'
+                   else 'border-white/20 hover:border-brand-400 hover:text-brand-400' }}">
+        Full Name
+      </a>
+      <a href="{{ url_for('ev_users.dashboard', sort='license_plate') }}"
+         class="px-4 py-1.5 rounded-lg border transition-colors
+                {{ 'border-brand-500 text-brand-400 bg-brand-500/10' if sort == 'license_plate'
+                   else 'border-white/20 hover:border-brand-400 hover:text-brand-400' }}">
+        License Plate
+      </a>
+    </div>
+
+    <!-- Table -->
+    {% if ev_users %}
+    <div class="overflow-x-auto rounded-2xl border border-white/10">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-card text-gray-400 uppercase text-xs tracking-widest">
+          <tr>
+            <th class="px-6 py-4">Full Name</th>
+            <th class="px-6 py-4">Email</th>
+            <th class="px-6 py-4">Phone</th>
+            <th class="px-6 py-4">Car Make</th>
+            <th class="px-6 py-4">Car Model</th>
+            <th class="px-6 py-4">License Plate</th>
+            <th class="px-6 py-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for u in ev_users %}
+          <tr class="bg-dark hover:bg-card/60 transition-colors">
+            <td class="px-6 py-4 font-medium text-white">{{ u.full_name }}</td>
+            <td class="px-6 py-4 text-gray-300">{{ u.email }}</td>
+            <td class="px-6 py-4 text-gray-300">{{ u.phone }}</td>
+            <td class="px-6 py-4 text-gray-300">{{ u.car_make }}</td>
+            <td class="px-6 py-4 text-gray-300">{{ u.car_model }}</td>
+            <td class="px-6 py-4">
+              <span class="bg-brand-600/20 border border-brand-500/40 text-brand-300
+                           px-3 py-1 rounded-full font-mono text-xs tracking-wider">
+                {{ u.license_plate }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <div class="flex items-center justify-end gap-3">
+                <button onclick="openEditModal({{ u.id }}, {{ u.full_name|tojson }}, {{ u.email|tojson }}, {{ u.phone|tojson }}, {{ u.car_make|tojson }}, {{ u.car_model|tojson }}, {{ u.license_plate|tojson }})"
+                        class="text-xs font-semibold text-brand-400 hover:text-brand-300
+                               border border-brand-500/40 hover:border-brand-400
+                               px-3 py-1.5 rounded-lg transition-colors">
+                  Edit
+                </button>
+                <button onclick="openDeleteModal({{ u.id }}, {{ u.full_name|tojson }})"
+                        class="text-xs font-semibold text-red-400 hover:text-red-300
+                               border border-red-500/40 hover:border-red-400
+                               px-3 py-1.5 rounded-lg transition-colors">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4 text-xs text-gray-600 text-right">
+      {{ ev_users|length }} vehicle{{ 's' if ev_users|length != 1 }} registered
+    </p>
+
+    {% else %}
+    <!-- Empty state -->
+    <div class="bg-card border border-white/10 rounded-2xl p-16 text-center">
+      <p class="text-5xl mb-4">&#9889;</p>
+      <h2 class="text-xl font-bold mb-2">No EV users yet</h2>
+      <p class="text-gray-400 text-sm mb-8">
+        Add your first EV driver to authorize their vehicle for autonomous VoltBot charging.
+      </p>
+      <button onclick="openAddModal()"
+              class="bg-brand-500 hover:bg-brand-600 text-white font-semibold
+                     px-8 py-3 rounded-xl transition-colors">
+        Add EV User
+      </button>
+    </div>
+    {% endif %}
+
+  </div><!-- /max-w-7xl -->
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ADD MODAL
+══════════════════════════════════════════════════════════════════ -->
+<div id="add-modal"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div class="bg-card border border-white/20 rounded-2xl shadow-2xl w-full max-w-lg">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <h2 class="text-lg font-bold">Add EV User</h2>
+      <button onclick="closeAddModal()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <form method="POST" action="{{ url_for('ev_users.add') }}" class="p-6 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Full Name *</label>
+          <input type="text" name="full_name" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Email *</label>
+          <input type="email" name="email" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Phone *</label>
+          <input type="tel" name="phone" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Car Make *</label>
+          <input type="text" name="car_make" required placeholder="e.g. Tesla, Rivian"
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Car Model *</label>
+          <input type="text" name="car_model" required placeholder="e.g. Model 3, R1T"
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">License Plate *</label>
+          <input type="text" name="license_plate" required placeholder="Used by VoltBot for autonomous identification"
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500 font-mono uppercase" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" onclick="closeAddModal()"
+                class="px-5 py-2.5 rounded-lg border border-white/20 text-sm text-gray-300
+                       hover:border-white/40 transition-colors">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white
+                       text-sm font-semibold transition-colors">
+          Add User
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     EDIT MODAL
+══════════════════════════════════════════════════════════════════ -->
+<div id="edit-modal"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div class="bg-card border border-white/20 rounded-2xl shadow-2xl w-full max-w-lg">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <h2 class="text-lg font-bold">Edit EV User</h2>
+      <button onclick="closeEditModal()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <form id="edit-form" method="POST" action="" class="p-6 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Full Name *</label>
+          <input type="text" name="full_name" id="edit-full-name" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Email *</label>
+          <input type="email" name="email" id="edit-email" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Phone *</label>
+          <input type="tel" name="phone" id="edit-phone" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Car Make *</label>
+          <input type="text" name="car_make" id="edit-car-make" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">Car Model *</label>
+          <input type="text" name="car_model" id="edit-car-model" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs text-gray-400 mb-1 uppercase tracking-widest">License Plate *</label>
+          <input type="text" name="license_plate" id="edit-license-plate" required
+                 class="w-full bg-dark border border-white/20 rounded-lg px-4 py-2.5 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500 font-mono uppercase" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" onclick="closeEditModal()"
+                class="px-5 py-2.5 rounded-lg border border-white/20 text-sm text-gray-300
+                       hover:border-white/40 transition-colors">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white
+                       text-sm font-semibold transition-colors">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DELETE CONFIRMATION MODAL
+══════════════════════════════════════════════════════════════════ -->
+<div id="delete-modal"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div class="bg-card border border-red-500/30 rounded-2xl shadow-2xl w-full max-w-md">
+    <div class="p-6 text-center">
+      <p class="text-4xl mb-4">&#9888;&#65039;</p>
+      <h2 class="text-xl font-bold mb-2">Remove EV User?</h2>
+      <p class="text-gray-400 text-sm mb-6">
+        Are you sure you want to remove
+        <strong id="delete-name" class="text-white"></strong>
+        from your authorized charging list? This cannot be undone.
+      </p>
+      <div class="flex justify-center gap-4">
+        <button onclick="closeDeleteModal()"
+                class="px-6 py-2.5 rounded-lg border border-white/20 text-sm text-gray-300
+                       hover:border-white/40 transition-colors">
+          Cancel
+        </button>
+        <form id="delete-form" method="POST" action="" class="inline">
+          <button type="submit"
+                  class="px-6 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white
+                         text-sm font-semibold transition-colors">
+            Yes, Remove
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function openAddModal() {
+    document.getElementById('add-modal').classList.remove('hidden');
+  }
+  function closeAddModal() {
+    document.getElementById('add-modal').classList.add('hidden');
+  }
+
+  function openEditModal(id, fullName, email, phone, carMake, carModel, licensePlate) {
+    document.getElementById('edit-form').action = `/settings/ev-users/${id}/edit`;
+    document.getElementById('edit-full-name').value = fullName;
+    document.getElementById('edit-email').value = email;
+    document.getElementById('edit-phone').value = phone;
+    document.getElementById('edit-car-make').value = carMake;
+    document.getElementById('edit-car-model').value = carModel;
+    document.getElementById('edit-license-plate').value = licensePlate;
+    document.getElementById('edit-modal').classList.remove('hidden');
+  }
+  function closeEditModal() {
+    document.getElementById('edit-modal').classList.add('hidden');
+  }
+
+  function openDeleteModal(id, fullName) {
+    document.getElementById('delete-name').textContent = fullName;
+    document.getElementById('delete-form').action = `/settings/ev-users/${id}/delete`;
+    document.getElementById('delete-modal').classList.remove('hidden');
+  }
+  function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
+  }
+
+  // Close modals on backdrop click
+  ['add-modal', 'edit-modal', 'delete-modal'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+  });
+</script>
+{% endblock %}
