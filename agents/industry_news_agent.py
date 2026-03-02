@@ -1,21 +1,20 @@
 """
 Industry News Agent — daily-cached EV/battery news + regulatory updates.
 
-Performance strategy:
-  - All RSS feeds fetched in parallel (ThreadPoolExecutor)
-  - Federal Register fetch runs concurrently with RSS fetching
-  - Both Claude curation calls run in parallel
-  - Results persisted to instance/news_cache.json (shared across all
-    Passenger worker processes)
-  - App startup triggers a warm-up fetch in the background so the
-    cache is ready before the first user visits
+Cache strategy:
+  1. File cache  (instance/news_cache.json) — shared across all Passenger
+     worker processes and survives restarts.
+  2. In-memory   — per-process fast layer on top of the file cache.
+
+On cold start the file is read immediately; on stale/missing file a
+background thread fetches new data and writes it to disk.  The JS
+frontend polls /api/industry-news until loading=false.
 """
 
 import re
 import json
 import os
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 
@@ -24,9 +23,7 @@ import requests
 
 # ── File cache path ───────────────────────────────────────────────────────────
 _BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
-_CACHE_FILE = os.path.normpath(
-    os.path.join(_BASE_DIR, "..", "instance", "news_cache.json")
-)
+_CACHE_FILE = os.path.normpath(os.path.join(_BASE_DIR, "..", "instance", "news_cache.json"))
 
 # ── In-memory cache (per Passenger worker) ───────────────────────────────────
 _cache: dict = {"news": None, "regulations": None, "updated": None}
@@ -54,12 +51,12 @@ def _write_file_cache(news: list, regulations: list) -> None:
                 "regulations": regulations,
                 "updated":     datetime.utcnow().isoformat(),
             }, f)
-        os.replace(tmp, _CACHE_FILE)
+        os.replace(tmp, _CACHE_FILE)   # atomic on POSIX & Windows
     except Exception:
         pass
 
 
-def _read_file_cache() -> tuple:
+def _read_file_cache() -> tuple[list | None, list | None, datetime | None]:
     try:
         with open(_CACHE_FILE, encoding="utf-8") as f:
             data = json.load(f)
@@ -70,7 +67,7 @@ def _read_file_cache() -> tuple:
 
 
 def _load_file_cache_into_memory() -> bool:
-    """Populate in-memory cache from file. Returns True if still valid."""
+    """Read file cache into _cache. Returns True if cache is still valid."""
     news, regs, updated = _read_file_cache()
     if news is None:
         return False
@@ -80,7 +77,7 @@ def _load_file_cache_into_memory() -> bool:
     return (datetime.utcnow() - updated) < CACHE_TTL
 
 
-# ── Data fetching (parallelised) ──────────────────────────────────────────────
+# ── Data fetching ─────────────────────────────────────────────────────────────
 
 def _strip_html(text: str) -> str:
     return re.sub(r"<[^>]+>", "", text or "").strip()
@@ -88,7 +85,7 @@ def _strip_html(text: str) -> str:
 
 def _parse_rss(url: str, limit: int = 20) -> list[dict]:
     try:
-        r = requests.get(url, timeout=7,
+        r = requests.get(url, timeout=8,
                          headers={"User-Agent": "PrezentEnergy-NewsAgent/1.0"})
         r.raise_for_status()
         root  = ET.fromstring(r.content)
@@ -106,30 +103,17 @@ def _parse_rss(url: str, limit: int = 20) -> list[dict]:
         return []
 
 
-def _fetch_all_rss() -> list[dict]:
-    """Fetch all RSS feeds in parallel."""
-    items: list[dict] = []
-    with ThreadPoolExecutor(max_workers=len(NEWS_FEEDS)) as ex:
-        futures = {ex.submit(_parse_rss, url): url for url in NEWS_FEEDS}
-        for fut in as_completed(futures):
-            try:
-                items.extend(fut.result())
-            except Exception:
-                pass
-    return items
-
-
 def _fetch_federal_register() -> list[dict]:
     try:
         r = requests.get(
             "https://www.federalregister.gov/api/v1/documents.json",
             params={
-                "conditions[term]":   "electric vehicle charging",
-                "conditions[type][]": ["RULE", "PROPOSED_RULE", "NOTICE"],
-                "per_page":           25,
-                "order":              "newest",
+                "conditions[term]":    "electric vehicle charging",
+                "conditions[type][]":  ["RULE", "PROPOSED_RULE", "NOTICE"],
+                "per_page":            25,
+                "order":               "newest",
             },
-            timeout=7,
+            timeout=8,
         )
         r.raise_for_status()
         items = []
@@ -165,10 +149,11 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 10) -> list[di
             "EV charging infrastructure expansion"
         ),
         "regulations": (
-            "UL 9741 / UL 1741 / IEEE 1547 bidirectional-charging safety, "
+            "UL 9741 / UL 1741 / IEEE 1547 bidirectional-charging safety standards, "
             "ISO 15118-20 V2G communication protocol, "
             "California SB 100 (100% clean energy by 2045), "
-            "LCFS 2026, DOE Infrastructure eXCHANGE grants, battery recycling"
+            "LCFS 2026 implementation, "
+            "DOE Infrastructure eXCHANGE grants, battery recycling policy"
         ),
     }
 
@@ -202,26 +187,23 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 10) -> list[di
         return fallback
 
 
-# ── Background fetch (fully parallelised) ─────────────────────────────────────
+# ── Background fetch ──────────────────────────────────────────────────────────
 
 def _do_fetch() -> None:
     global _is_fetching
     try:
-        # Fetch RSS and Federal Register in parallel
-        with ThreadPoolExecutor(max_workers=2) as ex:
-            rss_future = ex.submit(_fetch_all_rss)
-            reg_future = ex.submit(_fetch_federal_register)
-            raw_news = rss_future.result()
-            raw_regs = reg_future.result()
+        raw_news: list[dict] = []
+        for feed_url in NEWS_FEEDS:
+            raw_news.extend(_parse_rss(feed_url))
+        raw_regs = _fetch_federal_register()
 
-        # Curate both sections in parallel
-        with ThreadPoolExecutor(max_workers=2) as ex:
-            news_future = ex.submit(_curate_with_claude, raw_news, "news", 10)
-            reg_future  = ex.submit(_curate_with_claude, raw_regs, "regulations", 10)
-            news_items  = news_future.result()
-            reg_items   = reg_future.result()
+        news_items = _curate_with_claude(raw_news, "news", 10)
+        reg_items  = _curate_with_claude(raw_regs, "regulations", 10)
 
+        # Write to file first (shared across all workers)
         _write_file_cache(news_items, reg_items)
+
+        # Update this worker's in-memory cache
         _cache["news"]        = news_items
         _cache["regulations"] = reg_items
         _cache["updated"]     = datetime.utcnow()
@@ -233,14 +215,15 @@ def _do_fetch() -> None:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-def get_industry_news(force_refresh: bool = False) -> tuple:
+def get_industry_news(force_refresh: bool = False) -> tuple[list[dict], list[dict]]:
     """
     Return (news_items, regulation_items) immediately.
 
     Priority:
-      1. In-memory cache (warm, same worker)  → instant
-      2. File cache (fresh)                   → instant
-      3. Stale / missing → start background thread, return stale/empty
+      1. In-memory cache (warm)  → instant
+      2. File cache (fresh)      → instant (< 1 ms)
+      3. File cache (stale) or missing → start background thread,
+         return stale/empty data; JS will poll until loading=False
     """
     global _is_fetching
     now = datetime.utcnow()
@@ -251,11 +234,13 @@ def get_industry_news(force_refresh: bool = False) -> tuple:
             and (now - _cache["updated"]) < CACHE_TTL):
         return _cache["news"], _cache["regulations"]
 
-    # 2. File cache
-    if not force_refresh and _load_file_cache_into_memory():
-        return _cache["news"], _cache["regulations"]
+    # 2. Try file cache
+    if not force_refresh:
+        file_valid = _load_file_cache_into_memory()
+        if file_valid:
+            return _cache["news"], _cache["regulations"]
 
-    # 3. Stale / missing — kick off background refresh
+    # 3. Stale or missing — kick off background refresh
     with _fetch_lock:
         if not _is_fetching:
             _is_fetching = True
@@ -266,22 +251,3 @@ def get_industry_news(force_refresh: bool = False) -> tuple:
 
 def is_loading() -> bool:
     return _is_fetching
-
-
-def warm_up() -> None:
-    """
-    Called at app startup to pre-populate the cache before any user
-    visits the page.  Runs in a daemon thread — safe to call from
-    create_app().
-    """
-    news, regs, updated = _read_file_cache()
-    if news and updated and (datetime.utcnow() - updated) < CACHE_TTL:
-        # File cache is still fresh — load into memory and return
-        _load_file_cache_into_memory()
-        return
-    # Stale or missing — fetch in background
-    global _is_fetching
-    with _fetch_lock:
-        if not _is_fetching:
-            _is_fetching = True
-            threading.Thread(target=_do_fetch, daemon=True).start()
