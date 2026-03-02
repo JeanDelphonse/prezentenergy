@@ -53,9 +53,11 @@ def send_verification_code(user, purpose):
         f"please ignore this email.\n\n"
         f"- The Prezent.Energy Team"
     )
-    sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
-    server = current_app.config.get("MAIL_SERVER", "localhost")
-    port = int(current_app.config.get("MAIL_PORT", 25))
+    sender   = current_app.config.get("MAIL_DEFAULT_SENDER", "info@prezent.energy")
+    server   = current_app.config.get("MAIL_SERVER", "localhost")
+    port     = int(current_app.config.get("MAIL_PORT", 25))
+    username = current_app.config.get("MAIL_USERNAME") or None
+    password = current_app.config.get("MAIL_PASSWORD") or None
 
     mime = MIMEText(body, "plain", "utf-8")
     mime["Subject"] = subject
@@ -64,6 +66,12 @@ def send_verification_code(user, purpose):
 
     try:
         with smtplib.SMTP(server, port, timeout=10) as smtp:
+            smtp.ehlo()
+            if smtp.has_extn("STARTTLS"):
+                smtp.starttls()
+                smtp.ehlo()
+            if username and password:
+                smtp.login(username, password)
             smtp.sendmail(sender, [user.email], mime.as_string())
         return code, None
     except Exception as e:

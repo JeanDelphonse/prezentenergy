@@ -56,21 +56,33 @@ def email_debug():
     """
     info = {}
 
-    server = current_app.config.get("MAIL_SERVER", "localhost")
-    port   = int(current_app.config.get("MAIL_PORT", 25))
-    sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
+    server   = current_app.config.get("MAIL_SERVER", "localhost")
+    port     = int(current_app.config.get("MAIL_PORT", 25))
+    sender   = current_app.config.get("MAIL_DEFAULT_SENDER", "info@prezent.energy")
+    username = current_app.config.get("MAIL_USERNAME") or None
+    password = current_app.config.get("MAIL_PASSWORD") or None
 
-    info["smtp_server"] = server
-    info["smtp_port"]   = port
-    info["sender"]      = sender
+    info["smtp_server"]   = server
+    info["smtp_port"]     = port
+    info["sender"]        = sender
+    info["auth_username"] = username or "(none)"
 
-    # 1. Test TCP connection + EHLO
+    # 1. Test TCP connection + EHLO + STARTTLS + auth
     try:
         with smtplib.SMTP(server, port, timeout=8) as smtp:
             code, ehlo_msg = smtp.ehlo()
             info["smtp_connected"] = True
             info["smtp_ehlo_code"] = code
             info["smtp_ehlo"]      = ehlo_msg.decode(errors="replace")
+            if smtp.has_extn("STARTTLS"):
+                smtp.starttls()
+                smtp.ehlo()
+                info["starttls"] = True
+            else:
+                info["starttls"] = False
+            if username and password:
+                smtp.login(username, password)
+                info["auth"] = "login ok"
     except Exception as e:
         info["smtp_connected"] = False
         info["smtp_error"]     = str(e)
@@ -87,6 +99,12 @@ def email_debug():
             mime["From"]    = sender
             mime["To"]      = to_addr
             with smtplib.SMTP(server, port, timeout=8) as smtp:
+                smtp.ehlo()
+                if smtp.has_extn("STARTTLS"):
+                    smtp.starttls()
+                    smtp.ehlo()
+                if username and password:
+                    smtp.login(username, password)
                 smtp.sendmail(sender, [to_addr], mime.as_string())
             info["test_email_sent"] = True
             info["test_email_to"]   = to_addr
