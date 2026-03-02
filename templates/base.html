@@ -44,11 +44,33 @@
              class="h-10 w-auto" />
       </a>
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="{{ url_for('main.index') }}#voltbot-video" class="hover:text-brand-400 transition-colors">Watch Demo</a>
-        <a href="{{ url_for('main.index') }}#how-it-works"  class="hover:text-brand-400 transition-colors">How It Works</a>
+        <!-- About Us dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-1 hover:text-brand-400 transition-colors">
+            About Us <span class="text-xs">&#9660;</span>
+          </button>
+          <div class="absolute left-0 top-full mt-2 w-48 bg-card border border-white/20 rounded-xl
+                      shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                      transition-all duration-150 z-50 py-1">
+            <a href="{{ url_for('main.index') }}#voltbot-video"
+               class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
+              Watch Demo
+            </a>
+            <a href="{{ url_for('main.index') }}#how-it-works"
+               class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
+              How It Works
+            </a>
+            <a href="{{ url_for('main.index') }}#team"
+               class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
+              Team
+            </a>
+            <a href="{{ url_for('main.index') }}#faq"
+               class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
+              FAQ
+            </a>
+          </div>
+        </div>
         <a href="{{ url_for('main.index') }}#pricing"       class="hover:text-brand-400 transition-colors">Pricing</a>
-        <a href="{{ url_for('main.index') }}#team"          class="hover:text-brand-400 transition-colors">Team</a>
-        <a href="{{ url_for('main.index') }}#faq"           class="hover:text-brand-400 transition-colors">FAQ</a>
         <a href="{{ url_for('news.news_page') }}"            class="hover:text-brand-400 transition-colors">News</a>
         {% if current_user.is_authenticated %}
           <!-- Settings dropdown -->
