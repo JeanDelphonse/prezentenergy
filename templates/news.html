@@ -33,7 +33,7 @@
 
 
   <!-- ══════════════════════════════════════════════════════════════════
-       SECTIONS 1 & 2 — NEWS + REGULATIONS (SIDE BY SIDE)
+       SECTIONS 1 & 2 — NEWS + REGULATIONS (SIDE BY SIDE, async)
   ══════════════════════════════════════════════════════════════════ -->
   <section class="py-20 px-6 bg-card">
     <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
@@ -48,8 +48,6 @@
           EV charging, battery technology, autonomous charging robots, and the
           emerging V2X economy.
         </p>
-
-        <!-- Callout chips -->
         <div class="flex flex-wrap gap-2 mb-8 text-xs font-semibold">
           <span class="bg-dark border border-brand-600/40 text-brand-300 rounded-full px-3 py-1.5">
             ⚡ $633M DC Fast Charger Market by 2033
@@ -61,41 +59,7 @@
             🔋 LiFePO₄ &amp; Sodium-ion
           </span>
         </div>
-
-        {% if news %}
-          <div class="space-y-4">
-            {% for item in news %}
-            <a href="{{ item.url }}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="group flex items-start gap-4 bg-dark border border-white/10
-                      hover:border-brand-500/60 rounded-2xl p-5 transition-all
-                      hover:shadow-lg hover:shadow-brand-500/10">
-              <span class="text-brand-400 text-xl flex-shrink-0 mt-0.5">&#9889;</span>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-3 mb-1">
-                  <h3 class="text-white font-semibold leading-snug text-sm
-                             group-hover:text-brand-400 transition-colors">
-                    {{ item.title }}
-                  </h3>
-                  <span class="text-xs text-gray-500 whitespace-nowrap flex-shrink-0 mt-0.5">
-                    {{ item.date[:10] if item.date else "Recent" }}
-                  </span>
-                </div>
-                <span class="text-xs text-brand-500 font-medium inline-flex items-center gap-1
-                             group-hover:gap-2 transition-all">
-                  Read article <span>&#8594;</span>
-                </span>
-              </div>
-            </a>
-            {% endfor %}
-          </div>
-        {% else %}
-          <div class="bg-dark border border-white/10 rounded-2xl p-10 text-center text-gray-500">
-            <p class="text-4xl mb-4">&#128240;</p>
-            <p>News feed is refreshing — check back in a moment.</p>
-          </div>
-        {% endif %}
+        <div id="news-cards" class="space-y-4"><!-- populated by JS --></div>
       </div>
 
       <!-- ── Right: Rules & Regulations ────────────────────────── -->
@@ -108,8 +72,6 @@
           Grid interconnection standards, V2G communication protocols, state clean-energy
           mandates, and DOE funding opportunities.
         </p>
-
-        <!-- Regulation focus tags -->
         <div class="flex flex-wrap gap-2 mb-8 text-xs font-semibold">
           <span class="bg-dark border border-blue-500/30 text-blue-300 rounded-full px-3 py-1.5">
             UL 9741 · UL 1741 · IEEE 1547
@@ -124,48 +86,116 @@
             DOE eXCHANGE Grants
           </span>
         </div>
-
-        {% if regulations %}
-          <div class="space-y-4">
-            {% for item in regulations %}
-            <a href="{{ item.url }}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="group flex items-start gap-4 bg-dark border border-white/10
-                      hover:border-blue-500/50 rounded-2xl p-5 transition-all
-                      hover:shadow-lg hover:shadow-blue-500/10">
-              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/40
-                          flex items-center justify-center text-blue-400 font-bold text-xs mt-0.5">
-                {{ loop.index }}
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-3 mb-1">
-                  <h3 class="text-white font-semibold leading-snug text-sm
-                             group-hover:text-blue-300 transition-colors">
-                    {{ item.title }}
-                  </h3>
-                  <span class="text-xs text-gray-500 whitespace-nowrap flex-shrink-0 mt-0.5">
-                    {{ item.date[:10] if item.date else "Recent" }}
-                  </span>
-                </div>
-                <span class="text-xs text-blue-400 font-medium inline-flex items-center gap-1
-                             group-hover:gap-2 transition-all">
-                  View document <span>&#8594;</span>
-                </span>
-              </div>
-            </a>
-            {% endfor %}
-          </div>
-        {% else %}
-          <div class="bg-dark border border-white/10 rounded-2xl p-10 text-center text-gray-500">
-            <p class="text-4xl mb-4">&#9878;</p>
-            <p>Regulatory feed is refreshing — check back in a moment.</p>
-          </div>
-        {% endif %}
+        <div id="reg-cards" class="space-y-4"><!-- populated by JS --></div>
       </div>
 
     </div><!-- /grid -->
   </section>
+
+  <script>
+  (function () {
+    var POLL_INTERVAL = 5000; // retry every 5 s while loading
+    var MAX_POLLS     = 24;   // give up after ~2 min
+    var polls         = 0;
+
+    function skeleton() {
+      var spinner = '<div class="flex items-center gap-3 text-gray-500 text-sm mb-4">' +
+        '<svg class="animate-spin h-4 w-4 text-brand-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">' +
+        '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>' +
+        '<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>' +
+        'Fetching latest news&hellip;</div>';
+      var cards = Array(5).fill(0).map(function () {
+        return '<div class="animate-pulse bg-dark border border-white/10 rounded-2xl p-5 flex gap-4">' +
+          '<div class="w-6 h-6 bg-white/10 rounded-full flex-shrink-0 mt-0.5"></div>' +
+          '<div class="flex-1 space-y-2">' +
+            '<div class="h-3 bg-white/10 rounded w-3/4"></div>' +
+            '<div class="h-3 bg-white/10 rounded w-1/2"></div>' +
+          '</div></div>';
+      }).join('');
+      return spinner + cards;
+    }
+
+    function renderNews(items) {
+      var el = document.getElementById('news-cards');
+      if (!el) return;
+      if (!items || items.length === 0) {
+        el.innerHTML = '<div class="bg-dark border border-white/10 rounded-2xl p-10 text-center text-gray-500">' +
+          '<p class="text-4xl mb-4">&#128240;</p><p>News feed is refreshing\u2026</p></div>';
+        return;
+      }
+      el.innerHTML = items.map(function (item) {
+        var date = (item.date || '').slice(0, 10) || 'Recent';
+        return '<a href="' + escHtml(item.url) + '" target="_blank" rel="noopener noreferrer" ' +
+          'class="group flex items-start gap-4 bg-dark border border-white/10 ' +
+          'hover:border-brand-500/60 rounded-2xl p-5 transition-all hover:shadow-lg hover:shadow-brand-500/10">' +
+          '<span class="text-brand-400 text-xl flex-shrink-0 mt-0.5">&#9889;</span>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-start justify-between gap-3 mb-1">' +
+              '<h3 class="text-white font-semibold leading-snug text-sm group-hover:text-brand-400 transition-colors">' +
+                escHtml(item.title) + '</h3>' +
+              '<span class="text-xs text-gray-500 whitespace-nowrap flex-shrink-0 mt-0.5">' + escHtml(date) + '</span>' +
+            '</div>' +
+            '<span class="text-xs text-brand-500 font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">' +
+              'Read article &#8594;</span>' +
+          '</div></a>';
+      }).join('');
+    }
+
+    function renderRegs(items) {
+      var el = document.getElementById('reg-cards');
+      if (!el) return;
+      if (!items || items.length === 0) {
+        el.innerHTML = '<div class="bg-dark border border-white/10 rounded-2xl p-10 text-center text-gray-500">' +
+          '<p class="text-4xl mb-4">&#9878;</p><p>Regulatory feed is refreshing\u2026</p></div>';
+        return;
+      }
+      el.innerHTML = items.map(function (item, idx) {
+        var date = (item.date || '').slice(0, 10) || 'Recent';
+        return '<a href="' + escHtml(item.url) + '" target="_blank" rel="noopener noreferrer" ' +
+          'class="group flex items-start gap-4 bg-dark border border-white/10 ' +
+          'hover:border-blue-500/50 rounded-2xl p-5 transition-all hover:shadow-lg hover:shadow-blue-500/10">' +
+          '<div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/40 ' +
+          'flex items-center justify-center text-blue-400 font-bold text-xs mt-0.5">' + (idx + 1) + '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-start justify-between gap-3 mb-1">' +
+              '<h3 class="text-white font-semibold leading-snug text-sm group-hover:text-blue-300 transition-colors">' +
+                escHtml(item.title) + '</h3>' +
+              '<span class="text-xs text-gray-500 whitespace-nowrap flex-shrink-0 mt-0.5">' + escHtml(date) + '</span>' +
+            '</div>' +
+            '<span class="text-xs text-blue-400 font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">' +
+              'View document &#8594;</span>' +
+          '</div></a>';
+      }).join('');
+    }
+
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function load() {
+      document.getElementById('news-cards').innerHTML = skeleton();
+      document.getElementById('reg-cards').innerHTML  = skeleton();
+      fetch('/api/industry-news')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          renderNews(data.news);
+          renderRegs(data.regulations);
+          // If still fetching in background, poll until data arrives
+          if (data.loading && (!data.news || data.news.length === 0) && polls < MAX_POLLS) {
+            polls++;
+            setTimeout(load, POLL_INTERVAL);
+          }
+        })
+        .catch(function () {
+          if (polls < MAX_POLLS) { polls++; setTimeout(load, POLL_INTERVAL); }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', load);
+  })();
+  </script>
 
 
   <!-- ══════════════════════════════════════════════════════════════════

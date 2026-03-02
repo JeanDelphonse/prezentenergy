@@ -2,25 +2,28 @@ from flask import Blueprint, render_template, jsonify, request, current_app
 
 import requests
 
-from agents.industry_news_agent import get_industry_news
+from agents.industry_news_agent import get_industry_news, is_loading
 
 news_bp = Blueprint("news", __name__)
 
 
 @news_bp.route("/news")
 def news_page():
-    news, regulations = get_industry_news()
+    # Trigger background fetch if cache is cold — page renders instantly
+    get_industry_news()
     maps_key = current_app.config.get("GOOGLE_MAPS_API_KEY", "")
-    return render_template(
-        "news.html", news=news, regulations=regulations, maps_key=maps_key
-    )
+    return render_template("news.html", maps_key=maps_key)
 
 
 @news_bp.route("/api/industry-news")
 def industry_news_api():
     force = request.args.get("refresh") == "1"
     news, regulations = get_industry_news(force_refresh=force)
-    return jsonify({"news": news, "regulations": regulations})
+    return jsonify({
+        "news": news,
+        "regulations": regulations,
+        "loading": is_loading(),
+    })
 
 
 @news_bp.route("/api/charging-stations")

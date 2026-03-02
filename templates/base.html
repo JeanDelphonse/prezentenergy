@@ -68,9 +68,12 @@
                class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
               FAQ
             </a>
+            <a href="{{ url_for('main.index') }}#pricing"
+               class="block px-4 py-2.5 text-sm text-gray-300 hover:text-brand-400 hover:bg-white/5 transition-colors">
+              Pricing
+            </a>
           </div>
         </div>
-        <a href="{{ url_for('main.index') }}#pricing"       class="hover:text-brand-400 transition-colors">Pricing</a>
         <a href="{{ url_for('news.news_page') }}"            class="hover:text-brand-400 transition-colors">News</a>
         {% if current_user.is_authenticated %}
           <!-- Settings dropdown -->

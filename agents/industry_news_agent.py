@@ -1,25 +1,37 @@
 """
 Industry News Agent — daily-cached EV/battery news + regulatory updates.
 
-Fetches real articles from RSS feeds and the Federal Register API,
-then uses Claude Haiku to curate the top 5 most relevant items for each section.
-Results are cached in memory for 24 hours (no database storage per PRD §2).
+Cache strategy:
+  1. File cache  (instance/news_cache.json) — shared across all Passenger
+     worker processes and survives restarts.
+  2. In-memory   — per-process fast layer on top of the file cache.
+
+On cold start the file is read immediately; on stale/missing file a
+background thread fetches new data and writes it to disk.  The JS
+frontend polls /api/industry-news until loading=false.
 """
 
 import re
 import json
 import os
+import threading
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 
 import anthropic
 import requests
 
-# ── Module-level cache ────────────────────────────────────────────────────────
-_cache: dict = {"news": None, "regulations": None, "updated": None}
-CACHE_TTL = timedelta(hours=24)
+# ── File cache path ───────────────────────────────────────────────────────────
+_BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
+_CACHE_FILE = os.path.normpath(os.path.join(_BASE_DIR, "..", "instance", "news_cache.json"))
 
-# ── RSS sources (EV / battery focus) ─────────────────────────────────────────
+# ── In-memory cache (per Passenger worker) ───────────────────────────────────
+_cache: dict = {"news": None, "regulations": None, "updated": None}
+_fetch_lock  = threading.Lock()
+_is_fetching = False
+CACHE_TTL    = timedelta(hours=24)
+
+# ── RSS sources ───────────────────────────────────────────────────────────────
 NEWS_FEEDS = [
     "https://electrek.co/feed/",
     "https://cleantechnica.com/feed/",
@@ -27,74 +39,100 @@ NEWS_FEEDS = [
 ]
 
 
+# ── File cache helpers ────────────────────────────────────────────────────────
+
+def _write_file_cache(news: list, regulations: list) -> None:
+    try:
+        os.makedirs(os.path.dirname(_CACHE_FILE), exist_ok=True)
+        tmp = _CACHE_FILE + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump({
+                "news":        news,
+                "regulations": regulations,
+                "updated":     datetime.utcnow().isoformat(),
+            }, f)
+        os.replace(tmp, _CACHE_FILE)   # atomic on POSIX & Windows
+    except Exception:
+        pass
+
+
+def _read_file_cache() -> tuple[list | None, list | None, datetime | None]:
+    try:
+        with open(_CACHE_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+        updated = datetime.fromisoformat(data["updated"])
+        return data["news"], data["regulations"], updated
+    except Exception:
+        return None, None, None
+
+
+def _load_file_cache_into_memory() -> bool:
+    """Read file cache into _cache. Returns True if cache is still valid."""
+    news, regs, updated = _read_file_cache()
+    if news is None:
+        return False
+    _cache["news"]        = news
+    _cache["regulations"] = regs
+    _cache["updated"]     = updated
+    return (datetime.utcnow() - updated) < CACHE_TTL
+
+
+# ── Data fetching ─────────────────────────────────────────────────────────────
+
 def _strip_html(text: str) -> str:
     return re.sub(r"<[^>]+>", "", text or "").strip()
 
 
 def _parse_rss(url: str, limit: int = 20) -> list[dict]:
-    """Fetch an RSS feed and return a list of article dicts."""
     try:
-        r = requests.get(
-            url,
-            timeout=10,
-            headers={"User-Agent": "PrezentEnergy-NewsAgent/1.0"},
-        )
+        r = requests.get(url, timeout=8,
+                         headers={"User-Agent": "PrezentEnergy-NewsAgent/1.0"})
         r.raise_for_status()
-        root = ET.fromstring(r.content)
+        root  = ET.fromstring(r.content)
         items = []
         for item in root.findall(".//item")[:limit]:
-            title = _strip_html(item.findtext("title", ""))
-            link = (item.findtext("link") or "").strip()
+            title    = _strip_html(item.findtext("title", ""))
+            link     = (item.findtext("link") or "").strip()
             pub_date = (item.findtext("pubDate") or "").strip()
-            desc = _strip_html(item.findtext("description", ""))[:200]
+            desc     = _strip_html(item.findtext("description", ""))[:200]
             if title and link:
-                items.append(
-                    {"title": title, "link": link, "date": pub_date, "description": desc}
-                )
+                items.append({"title": title, "link": link,
+                               "date": pub_date, "description": desc})
         return items
     except Exception:
         return []
 
 
 def _fetch_federal_register() -> list[dict]:
-    """Query the Federal Register API for recent EV-related rules/notices."""
     try:
         r = requests.get(
             "https://www.federalregister.gov/api/v1/documents.json",
             params={
-                "conditions[term]": "electric vehicle charging",
-                "conditions[type][]": ["RULE", "PROPOSED_RULE", "NOTICE"],
-                "per_page": 25,
-                "order": "newest",
+                "conditions[term]":    "electric vehicle charging",
+                "conditions[type][]":  ["RULE", "PROPOSED_RULE", "NOTICE"],
+                "per_page":            25,
+                "order":               "newest",
             },
-            timeout=10,
+            timeout=8,
         )
         r.raise_for_status()
         items = []
         for doc in r.json().get("results", []):
-            title = (doc.get("title") or "").strip()
-            url = doc.get("html_url", "")
+            title    = (doc.get("title") or "").strip()
+            url      = doc.get("html_url", "")
             pub_date = doc.get("publication_date", "")
             abstract = _strip_html(doc.get("abstract") or "")[:200]
             if title and url:
-                items.append(
-                    {"title": title, "link": url, "date": pub_date, "description": abstract}
-                )
+                items.append({"title": title, "link": url,
+                               "date": pub_date, "description": abstract})
         return items
     except Exception:
         return []
 
 
-def _curate_with_claude(items: list[dict], section: str, n: int = 5) -> list[dict]:
-    """
-    Ask Claude Haiku to pick the top-N most relevant articles and return
-    a JSON array of {title, date, url} objects.
-    Falls back to the first N raw items if the API call fails.
-    """
-    fallback = [
-        {"title": i["title"], "date": i["date"], "url": i["link"]}
-        for i in items[:n]
-    ]
+def _curate_with_claude(items: list[dict], section: str, n: int = 10) -> list[dict]:
+    fallback = [{"title": i["title"], "date": i["date"], "url": i["link"]}
+                for i in items[:n]]
     if not items:
         return fallback
 
@@ -115,8 +153,7 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 5) -> list[dic
             "ISO 15118-20 V2G communication protocol, "
             "California SB 100 (100% clean energy by 2045), "
             "LCFS 2026 implementation, "
-            "DOE Infrastructure eXCHANGE grants, "
-            "battery recycling policy"
+            "DOE Infrastructure eXCHANGE grants, battery recycling policy"
         ),
     }
 
@@ -124,28 +161,25 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 5) -> list[dic
         f"{idx + 1}. TITLE: {item['title']}\n   DATE:  {item['date']}\n   URL:   {item['link']}"
         for idx, item in enumerate(items)
     )
-
     prompt = (
         f"From these articles, select the {n} most relevant to: {focus_map[section]}\n\n"
         f"{items_text}\n\n"
-        f"Return ONLY a JSON array of exactly {n} objects. "
-        "Each object must have these keys: "
+        f"Return ONLY a JSON array of exactly {n} objects with keys: "
         '"title" (string), "date" (string), "url" (string). '
         "No markdown fences, no explanation — only the JSON array."
     )
 
     try:
         client = anthropic.Anthropic(api_key=api_key)
-        resp = client.messages.create(
+        resp   = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=900,
+            max_tokens=1200,
             messages=[{"role": "user", "content": prompt}],
         )
         text = resp.content[0].text.strip()
-        # Strip markdown code fences if model added them
         if "```" in text:
             parts = text.split("```")
-            text = parts[1] if len(parts) > 1 else parts[0]
+            text  = parts[1] if len(parts) > 1 else parts[0]
             if text.lstrip().startswith("json"):
                 text = text.lstrip()[4:]
         return json.loads(text)
@@ -153,35 +187,67 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 5) -> list[dic
         return fallback
 
 
+# ── Background fetch ──────────────────────────────────────────────────────────
+
+def _do_fetch() -> None:
+    global _is_fetching
+    try:
+        raw_news: list[dict] = []
+        for feed_url in NEWS_FEEDS:
+            raw_news.extend(_parse_rss(feed_url))
+        raw_regs = _fetch_federal_register()
+
+        news_items = _curate_with_claude(raw_news, "news", 10)
+        reg_items  = _curate_with_claude(raw_regs, "regulations", 10)
+
+        # Write to file first (shared across all workers)
+        _write_file_cache(news_items, reg_items)
+
+        # Update this worker's in-memory cache
+        _cache["news"]        = news_items
+        _cache["regulations"] = reg_items
+        _cache["updated"]     = datetime.utcnow()
+    except Exception:
+        pass
+    finally:
+        _is_fetching = False
+
+
+# ── Public API ────────────────────────────────────────────────────────────────
+
 def get_industry_news(force_refresh: bool = False) -> tuple[list[dict], list[dict]]:
     """
-    Return (news_items, regulation_items).
-    Each item: {"title": str, "date": str, "url": str}.
-    Results are cached in memory for 24 hours.
+    Return (news_items, regulation_items) immediately.
+
+    Priority:
+      1. In-memory cache (warm)  → instant
+      2. File cache (fresh)      → instant (< 1 ms)
+      3. File cache (stale) or missing → start background thread,
+         return stale/empty data; JS will poll until loading=False
     """
+    global _is_fetching
     now = datetime.utcnow()
-    cache_valid = (
-        not force_refresh
-        and _cache["updated"] is not None
-        and (now - _cache["updated"]) < CACHE_TTL
-    )
-    if cache_valid:
+
+    # 1. In-memory hit
+    if (not force_refresh
+            and _cache["updated"] is not None
+            and (now - _cache["updated"]) < CACHE_TTL):
         return _cache["news"], _cache["regulations"]
 
-    # ── fetch raw data ────────────────────────────────────────────────────────
-    raw_news: list[dict] = []
-    for feed_url in NEWS_FEEDS:
-        raw_news.extend(_parse_rss(feed_url))
+    # 2. Try file cache
+    if not force_refresh:
+        file_valid = _load_file_cache_into_memory()
+        if file_valid:
+            return _cache["news"], _cache["regulations"]
 
-    raw_regs = _fetch_federal_register()
+    # 3. Stale or missing — kick off background refresh
+    with _fetch_lock:
+        if not _is_fetching:
+            _is_fetching = True
+            threading.Thread(target=_do_fetch, daemon=True).start()
 
-    # ── curate with Claude ────────────────────────────────────────────────────
-    news_items = _curate_with_claude(raw_news, "news", 10)
-    reg_items = _curate_with_claude(raw_regs, "regulations", 10)
+    return _cache["news"] or [], _cache["regulations"] or []
 
-    # ── store in cache ────────────────────────────────────────────────────────
-    _cache["news"] = news_items
-    _cache["regulations"] = reg_items
-    _cache["updated"] = now
 
-    return news_items, reg_items
+def is_loading() -> bool:
+    return _is_fetching
