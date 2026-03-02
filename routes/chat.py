@@ -1,4 +1,6 @@
 import os
+import smtplib
+from email.mime.text import MIMEText
 from flask import Blueprint, request, jsonify, current_app
 from agents.chatbot import get_chat_response
 from agents.news_agent import query_news_agent
@@ -40,6 +42,57 @@ def chat_debug():
     # 4. env file path check
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
     info["env_file_exists"] = os.path.isfile(os.path.normpath(env_path))
+
+    return jsonify(info)
+
+
+@chat_bp.route("/email-debug", methods=["GET"])
+def email_debug():
+    """Diagnostic endpoint — tests SMTP config and optionally sends a test email.
+
+    Usage:
+      GET /api/email-debug              — show config + test SMTP connection
+      GET /api/email-debug?to=a@b.com  — also send a test email to that address
+    """
+    info = {}
+
+    server = current_app.config.get("MAIL_SERVER", "localhost")
+    port   = int(current_app.config.get("MAIL_PORT", 25))
+    sender = current_app.config.get("MAIL_DEFAULT_SENDER", "noreply@colloquyai.com")
+
+    info["smtp_server"] = server
+    info["smtp_port"]   = port
+    info["sender"]      = sender
+
+    # 1. Test TCP connection + EHLO
+    try:
+        with smtplib.SMTP(server, port, timeout=8) as smtp:
+            code, ehlo_msg = smtp.ehlo()
+            info["smtp_connected"] = True
+            info["smtp_ehlo_code"] = code
+            info["smtp_ehlo"]      = ehlo_msg.decode(errors="replace")
+    except Exception as e:
+        info["smtp_connected"] = False
+        info["smtp_error"]     = str(e)
+        return jsonify(info)
+
+    # 2. Optional test send
+    to_addr = request.args.get("to", "").strip()
+    if to_addr:
+        try:
+            mime = MIMEText(
+                "This is a test email from Prezent.Energy to verify SMTP delivery.", "plain", "utf-8"
+            )
+            mime["Subject"] = "Prezent.Energy — SMTP test"
+            mime["From"]    = sender
+            mime["To"]      = to_addr
+            with smtplib.SMTP(server, port, timeout=8) as smtp:
+                smtp.sendmail(sender, [to_addr], mime.as_string())
+            info["test_email_sent"] = True
+            info["test_email_to"]   = to_addr
+        except Exception as e:
+            info["test_email_sent"]  = False
+            info["test_email_error"] = str(e)
 
     return jsonify(info)
 
