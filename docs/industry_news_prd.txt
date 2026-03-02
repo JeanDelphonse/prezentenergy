@@ -1,0 +1,44 @@
+Product Requirement Document: Industry News & Resource Center
+Project Overview The objective of the Industry News page is to provide Prezent Energy website visitors with a high-utility, 
+real-time intelligence hub. This page will position the company as an authority in the EV Charging-as-a-Service (CaaS) and 
+battery infrastructure space by highlighting emerging trends, regulatory shifts, and public charging accessibility.
+
+--------------------------------------------------------------------------------
+1. Functional Sections
+Section 1: Top 5 Latest Industry News (EV Charging & Batteries)
+This section highlights the rapid evolution of the electric mobility ecosystem.
+Content Focus Areas:
+The growth of the Portable DC Fast Charger Market (projected to reach $633.36M by 2033).
+Advancements in autonomous mobile charging robots (e.g., VoltBot and Gotion Gen2-EPLVS).
+V2X Superpowers: Emerging trends in V2G, V2L, and V2V that turn cars into versatile powerhouses.
+Breakthroughs in LiFePO₄ and Sodium-ion battery technologies.
+Format: Title of the news/article, Publication Date, and a Hyperlink.
+Section 2: Top 5 Rules and Regulations
+This section informs visitors about the complex regulatory landscape governing grid interconnection and infrastructure funding.
+Content Focus Areas:
+Interconnection Standards: Updates to UL 9741, UL 1741, and IEEE 1547 for bidirectional charging safety.
+Communication Protocols: International standards for V2G communication, specifically ISO 15118-20.
+State Goals: Progress toward California SB 100 (100% clean energy by 2045).
+Funding & Grants: New opportunities from the DOE Infrastructure eXCHANGE, such as the LCFS 2026 Implementation Plan or battery recycling grants.
+Format: Title of the regulation/publication, Publication Date, and a Hyperlink.
+Section 3: Interactive Supercharging Map
+An interactive tool to help users find high-speed public infrastructure.
+Functionality:
+Auto-Location: A Google Map interface that automatically centers on the user's current device location to show the nearest EV supercharging stations.
+Manual Search: A search field allowing users to enter a Zip Code to find stations in specific areas.
+Utility: Helps users manage "Range Anxiety" by locating DC fast-charging ports (Level 3).
+
+--------------------------------------------------------------------------------
+2. Technical & Data Specifications
+Daily Refresh: Sections 1 and 2 must be refreshed daily by an automated script or AI agent.
+Publication Sourcing: The system must search established web publications and databases, including Wikipedia, DOE eXCHANGE, and specialized EV newsrooms.
+Storage Logic: To optimize performance and ease of maintenance, industry news data will not be stored in a permanent database.
+Server Cache Manager: The daily news feed must be stored exclusively on the server cache manager.
+Link Behavior: All hyperlinks provided in Section 1 and Section 2 must open in a separate browser window (target="_blank") to keep visitors on the Prezent Energy platform.
+
+--------------------------------------------------------------------------------
+3. UI/UX Design Considerations
+Aesthetic Alignment: The UI should utilize a futuristic, high-tech design that reflects the VoltBot brand.
+Segmented Layout: Use clear, professional section headings to separate news from regulatory content.
+Mobile Responsiveness: The Google Map component must be fully responsive, ensuring ease of use for technicians or drivers accessing the site from parking lots or mobile environments.
+Value Highlighting: Use small callouts to emphasize cost-saving rules, such as V2G earnings potential (800–1,200 annually per vehicle) to drive visitor engagement

@@ -32,7 +32,7 @@ Market context: 36% of Americans in multi-unit housing currently lack access to 
                - 25 kWh per session (~80–100 miles)
                - Flexible scheduling, no long-term commitment
 
-  Corporate   $1,400 / month   10+ EV drivers
+  Corporate   $8,900 / month   10+ EV drivers
                - 40 sessions per month
                - Priority scheduling windows
                - Dedicated account manager + sustainability reporting

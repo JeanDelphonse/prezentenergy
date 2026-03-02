@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% block title %}Industry News &amp; Resource Center — Prezent.Energy{% endblock %}
+
+{% block content %}
+<div class="pt-20">
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-dark text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-dark to-dark pointer-events-none"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-4">
+        Intelligence Hub
+      </p>
+      <h1 class="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight">
+        Industry News &amp;<br /><span class="text-brand-400">Resource Center</span>
+      </h1>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+        Real-time intelligence on EV charging, battery breakthroughs, regulatory shifts,
+        and the V2X economy — refreshed daily.
+      </p>
+
+      <!-- V2G earnings callout -->
+      <div class="mt-8 inline-flex items-center gap-3 bg-brand-600/20 border border-brand-500/40
+                  rounded-full px-6 py-3 text-sm font-semibold text-brand-300">
+        <span class="text-brand-400 text-lg">&#9889;</span>
+        V2G vehicles can earn <strong class="text-white mx-1">$800–$1,200/year</strong>
+        feeding energy back to the grid
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 1 — TOP 5 INDUSTRY NEWS
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-card">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-4">
+        <span class="text-brand-400 text-3xl">&#128240;</span>
+      </div>
+      <h2 class="text-4xl font-bold mb-3">Top 5 Latest Industry News</h2>
+      <p class="text-gray-400 mb-12 max-w-2xl">
+        EV charging, battery technology, autonomous charging robots, and the
+        emerging V2X economy.
+      </p>
+
+      <!-- Callout chips -->
+      <div class="flex flex-wrap gap-3 mb-10 text-xs font-semibold">
+        <span class="bg-dark border border-brand-600/40 text-brand-300 rounded-full px-4 py-1.5">
+          ⚡ Portable DC Fast Charger Market: $633M by 2033
+        </span>
+        <span class="bg-dark border border-brand-600/40 text-brand-300 rounded-full px-4 py-1.5">
+          🤖 Autonomous Robots: VoltBot &amp; Gotion Gen2-EPLVS
+        </span>
+        <span class="bg-dark border border-brand-600/40 text-brand-300 rounded-full px-4 py-1.5">
+          🔋 LiFePO₄ &amp; Sodium-ion Breakthroughs
+        </span>
+      </div>
+
+      {% if news %}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {% for item in news %}
+          <a href="{{ item.url }}"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="group block bg-dark border border-white/10 hover:border-brand-500/60
+                    rounded-2xl p-6 transition-all hover:shadow-lg hover:shadow-brand-500/10">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <span class="text-brand-400 text-2xl">&#9889;</span>
+              <span class="text-xs text-gray-500 whitespace-nowrap mt-1">
+                {{ item.date[:10] if item.date else "Recent" }}
+              </span>
+            </div>
+            <h3 class="text-white font-semibold leading-snug mb-3
+                       group-hover:text-brand-400 transition-colors">
+              {{ item.title }}
+            </h3>
+            <span class="text-xs text-brand-500 font-medium inline-flex items-center gap-1
+                         group-hover:gap-2 transition-all">
+              Read article <span>&#8594;</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-dark border border-white/10 rounded-2xl p-10 text-center text-gray-500">
+          <p class="text-4xl mb-4">&#128240;</p>
+          <p>News feed is refreshing — check back in a moment.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 2 — TOP 5 RULES & REGULATIONS
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-dark">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-4">
+        <span class="text-brand-400 text-3xl">&#9878;</span>
+      </div>
+      <h2 class="text-4xl font-bold mb-3">Top 5 Rules &amp; Regulations</h2>
+      <p class="text-gray-400 mb-12 max-w-2xl">
+        Grid interconnection standards, V2G communication protocols, state clean-energy
+        mandates, and DOE funding opportunities.
+      </p>
+
+      <!-- Regulation focus tags -->
+      <div class="flex flex-wrap gap-3 mb-10 text-xs font-semibold">
+        <span class="bg-card border border-blue-500/30 text-blue-300 rounded-full px-4 py-1.5">
+          UL 9741 · UL 1741 · IEEE 1547
+        </span>
+        <span class="bg-card border border-blue-500/30 text-blue-300 rounded-full px-4 py-1.5">
+          ISO 15118-20 V2G
+        </span>
+        <span class="bg-card border border-blue-500/30 text-blue-300 rounded-full px-4 py-1.5">
+          CA SB 100 · LCFS 2026
+        </span>
+        <span class="bg-card border border-blue-500/30 text-blue-300 rounded-full px-4 py-1.5">
+          DOE eXCHANGE Grants
+        </span>
+      </div>
+
+      {% if regulations %}
+        <div class="space-y-4">
+          {% for item in regulations %}
+          <a href="{{ item.url }}"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="group flex items-start gap-5 bg-card border border-white/10
+                    hover:border-blue-500/50 rounded-2xl p-6 transition-all
+                    hover:shadow-lg hover:shadow-blue-500/10">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/40
+                        flex items-center justify-center text-blue-400 font-bold text-sm mt-0.5">
+              {{ loop.index }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-4 mb-1">
+                <h3 class="text-white font-semibold leading-snug
+                           group-hover:text-blue-300 transition-colors">
+                  {{ item.title }}
+                </h3>
+                <span class="text-xs text-gray-500 whitespace-nowrap flex-shrink-0 mt-0.5">
+                  {{ item.date[:10] if item.date else "Recent" }}
+                </span>
+              </div>
+              <span class="text-xs text-blue-400 font-medium inline-flex items-center gap-1
+                           group-hover:gap-2 transition-all">
+                View document <span>&#8594;</span>
+              </span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-card border border-white/10 rounded-2xl p-10 text-center text-gray-500">
+          <p class="text-4xl mb-4">&#9878;</p>
+          <p>Regulatory feed is refreshing — check back in a moment.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 3 — INTERACTIVE SUPERCHARGING MAP
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-card">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-4 mb-4">
+        <span class="text-brand-400 text-3xl">&#127757;</span>
+      </div>
+      <h2 class="text-4xl font-bold mb-3">Interactive Supercharging Map</h2>
+      <p class="text-gray-400 mb-4 max-w-2xl">
+        Find the nearest <strong class="text-white">DC Fast Charge (Level 3)</strong>
+        stations. Auto-locates to your current position — or search by zip code.
+      </p>
+
+      <!-- Range anxiety callout -->
+      <div class="inline-flex items-center gap-2 bg-dark border border-brand-600/40
+                  rounded-full px-5 py-2 text-sm text-brand-300 font-medium mb-10">
+        <span>&#128204;</span>
+        Tap any green marker for station details
+      </div>
+
+      <!-- Zip search bar -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <input id="map-zip-input"
+               type="text"
+               inputmode="numeric"
+               pattern="[0-9]{5}"
+               maxlength="5"
+               placeholder="Enter zip code…"
+               class="flex-1 bg-dark border border-white/20 rounded-xl px-5 py-3 text-white
+                      placeholder-gray-500 focus:outline-none focus:border-brand-500
+                      text-sm font-medium" />
+        <button id="map-search-btn"
+                class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-3
+                       rounded-xl transition-colors text-sm whitespace-nowrap">
+          Search Area
+        </button>
+      </div>
+      <p id="map-status" class="text-sm text-red-400 mb-4 min-h-[1.25rem]"></p>
+
+      <!-- Map container -->
+      {% if maps_key %}
+        <div id="charging-map"
+             class="w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
+             style="height: 520px;"></div>
+      {% else %}
+        <div class="w-full rounded-2xl overflow-hidden border border-yellow-500/30
+                    bg-yellow-900/20 flex items-center justify-center"
+             style="height: 520px;">
+          <div class="text-center px-8">
+            <p class="text-4xl mb-4">&#128507;</p>
+            <p class="text-yellow-300 font-semibold mb-2">Google Maps API key not configured</p>
+            <p class="text-gray-400 text-sm max-w-sm">
+              Add <code class="bg-dark px-2 py-0.5 rounded text-yellow-200">GOOGLE_MAPS_API_KEY</code>
+              to your <code class="bg-dark px-2 py-0.5 rounded text-yellow-200">.env</code> file
+              to enable the interactive map.
+            </p>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Legend -->
+      <div class="mt-6 flex flex-wrap gap-6 text-sm text-gray-400">
+        <div class="flex items-center gap-2">
+          <span class="w-4 h-4 rounded-full bg-brand-500 border-2 border-brand-700 flex-shrink-0"></span>
+          DC Fast Charge station (Level 3)
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-400">&#128205;</span>
+          Click marker for name &amp; address
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-400">&#128246;</span>
+          Auto-centers on your location
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 4 — AI NEWS QUERY AGENT
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-dark">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center gap-4 mb-4">
+        <span class="text-brand-400 text-3xl">&#129302;</span>
+      </div>
+      <h2 class="text-4xl font-bold mb-3">Ask the News Agent</h2>
+      <p class="text-gray-400 mb-10 max-w-2xl">
+        Ask about EV infrastructure funding, California LCFS updates, V2X standards,
+        or how new regulations affect your specific site type.
+      </p>
+
+      <div class="bg-card border border-white/10 rounded-2xl overflow-hidden">
+        <div id="news-messages" class="p-6 space-y-4 min-h-48 text-sm text-gray-300">
+          <p class="text-gray-500 italic">
+            Try: "What are the latest LCFS updates for 2026?" or
+            "How does California SB 100 affect residential EV charging?"
+          </p>
+        </div>
+        <div class="border-t border-white/10 p-4 flex gap-3">
+          <input id="news-input"
+                 type="text"
+                 placeholder="Ask about CaaS trends, regulations, funding…"
+                 class="flex-1 bg-dark border border-white/20 rounded-lg px-4 py-3 text-sm text-white
+                        placeholder-gray-500 focus:outline-none focus:border-brand-500" />
+          <button id="news-send"
+                  class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg text-sm
+                         transition-colors font-medium whitespace-nowrap">
+            Ask Agent
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       CTA FOOTER BANNER
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="py-20 px-6 bg-dark text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-bold mb-4">
+        Ready to Eliminate Range Anxiety<br />
+        <span class="text-brand-400">At Your Facility?</span>
+      </h2>
+      <p class="text-gray-400 mb-8">
+        Bring autonomous DC fast charging to your fleet — $0 upfront, live in one week.
+      </p>
+      <a href="{{ url_for('main.index') }}#demo"
+         class="inline-block bg-brand-500 hover:bg-brand-600 text-white font-semibold
+                px-10 py-4 rounded-xl transition-colors text-lg shadow-lg shadow-brand-500/30">
+        Schedule a Demo
+      </a>
+    </div>
+  </section>
+
+</div><!-- /pt-20 -->
+
+{% if maps_key %}
+<!-- Google Maps JS API — loaded after page content -->
+<script src="https://maps.googleapis.com/maps/api/js?key={{ maps_key }}&callback=initNewsMap&loading=async"
+        async defer></script>
+<script src="{{ url_for('static', filename='js/news-map.js') }}"></script>
+{% endif %}
+{% endblock %}

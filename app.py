@@ -31,11 +31,13 @@ def create_app(config_name=None):
         from routes.leads import leads_bp
         from routes.chat import chat_bp
         from routes.auth import auth_bp
+        from routes.news import news_bp
 
         app.register_blueprint(main_bp)
         app.register_blueprint(leads_bp, url_prefix="/api")
         app.register_blueprint(chat_bp, url_prefix="/api")
         app.register_blueprint(auth_bp)
+        app.register_blueprint(news_bp)
 
         db.create_all()
 

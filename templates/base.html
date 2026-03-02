@@ -49,7 +49,7 @@
         <a href="{{ url_for('main.index') }}#pricing"       class="hover:text-brand-400 transition-colors">Pricing</a>
         <a href="{{ url_for('main.index') }}#team"          class="hover:text-brand-400 transition-colors">Team</a>
         <a href="{{ url_for('main.index') }}#faq"           class="hover:text-brand-400 transition-colors">FAQ</a>
-        <a href="{{ url_for('main.index') }}#news"          class="hover:text-brand-400 transition-colors">News</a>
+        <a href="{{ url_for('news.news_page') }}"            class="hover:text-brand-400 transition-colors">News</a>
         {% if current_user.is_authenticated %}
           <a href="{{ url_for('auth.account') }}" class="hover:text-brand-400 transition-colors">Account</a>
           <form method="POST" action="{{ url_for('auth.logout') }}" class="inline">
@@ -88,6 +88,7 @@
           <li><a href="{{ url_for('main.index') }}#pricing"      class="hover:text-brand-400">Pricing</a></li>
           <li><a href="{{ url_for('main.index') }}#faq"          class="hover:text-brand-400">FAQ</a></li>
           <li><a href="{{ url_for('main.index') }}#demo"         class="hover:text-brand-400">Schedule Demo</a></li>
+          <li><a href="{{ url_for('news.news_page') }}"          class="hover:text-brand-400">Industry News</a></li>
         </ul>
       </div>
       <div>
