@@ -93,7 +93,11 @@
   </section>
 
   <script>
+  window.API_INDUSTRY_NEWS = "{{ url_for('news.industry_news_api') }}";
+  </script>
+  <script>
   (function () {
+    var API_URL       = window.API_INDUSTRY_NEWS;
     var POLL_INTERVAL = 5000; // retry every 5 s while loading
     var MAX_POLLS     = 24;   // give up after ~2 min
     var polls         = 0;
@@ -177,7 +181,7 @@
     function load() {
       document.getElementById('news-cards').innerHTML = skeleton();
       document.getElementById('reg-cards').innerHTML  = skeleton();
-      fetch('/api/industry-news')
+      fetch(API_URL)
         .then(function (r) { return r.json(); })
         .then(function (data) {
           renderNews(data.news);
