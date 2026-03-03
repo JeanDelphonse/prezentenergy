@@ -122,6 +122,39 @@
     </div>
     {% endif %}
 
+    <!-- ── Client Information ─────────────────────────────────────────── -->
+    <div class="mt-14">
+      <p class="text-brand-400 font-semibold tracking-widest uppercase text-sm mb-4">
+        Client Information
+      </p>
+      <div class="bg-card border border-white/10 rounded-2xl p-8 grid sm:grid-cols-3 gap-8">
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Full Name</p>
+          <p class="text-white font-semibold">{{ current_user.full_name }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Email</p>
+          <p class="text-white font-semibold break-all">{{ current_user.email }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Organization</p>
+          <p class="text-white font-semibold">{{ current_user.organization or '—' }}</p>
+        </div>
+        {% if current_user.phone %}
+        <div>
+          <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Phone</p>
+          <p class="text-white font-semibold">{{ current_user.phone }}</p>
+        </div>
+        {% endif %}
+        {% if current_user.address %}
+        <div class="sm:col-span-2">
+          <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Address</p>
+          <p class="text-white font-semibold">{{ current_user.address }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
   </div><!-- /max-w-7xl -->
 </div>
 
