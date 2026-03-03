@@ -49,8 +49,10 @@ prezentenergy/
 ├── models.py            # SQLAlchemy models (Lead)
 ├── config.py            # Environment-based config (dev/prod)
 ├── docs/
-│   ├── prd.txt          # Website requirements — sections, copy, lead form, chatbot, news agent
-│   └── login_prd.txt    # Auth system FRD — registration, 2FA, profile management, session
+│   ├── prd.txt                     # Website requirements — sections, copy, lead form, chatbot, news agent
+│   ├── login_prd.txt               # Auth system FRD — registration, 2FA, profile management, session
+│   ├── industry_news_prd.txt       # Industry News page PRD — news feed, regulations, map
+│   └── login_EV_User_Onboarding.txt # EV user onboarding flow spec
 ├── requirements.txt
 ├── .env                 # API keys, DB path (never commit)
 ├── static/
@@ -62,8 +64,10 @@ prezentenergy/
 │   ├── index.html       # Single-page sections A–G (see PRD §2)
 │   └── partials/        # Hero, pricing, team, FAQ, CTA form partials
 ├── agents/
-│   ├── chatbot.py       # Persistent chatbot — uses Claude API, system prompt from PRD specs
-│   └── news_agent.py    # AI news feed agent (DOE, PG&E, LCFS, V2X sources)
+│   ├── agents.md              # Agent reference + doc-maintenance rules (read this first)
+│   ├── chatbot.py             # Persistent chatbot — Claude API, fact base from static/about/
+│   ├── news_agent.py          # Conversational news/regulatory Q&A agent
+│   └── industry_news_agent.py # Daily-cached RSS + Federal Register feed (file + memory cache)
 ├── routes/
 │   ├── main.py          # Page routes
 │   ├── leads.py         # POST /api/leads — saves to SQLite
@@ -95,17 +99,26 @@ timeline, comments
 created_at  # timestamp
 ```
 
-### AI Chatbot (agents/chatbot.py)
+### Agents (`agents/`)
 
-- Persistent UI widget on every page (bottom-right corner).
-- System prompt must embed: VoltBot specs, pricing tiers, CCS1/CCS2 compatibility, thermal management FAQ, V2X roadmap, 130-hour productivity stat, 800–1,200 VPP earnings figure.
-- Endpoint: `POST /api/chat` — streams Claude response back to the widget.
+> **See `agents/agents.md`** for the full agent reference, doc-to-code mapping,
+> update rules, and pre-commit checklist.
 
-### News Agent (agents/news_agent.py)
+**chatbot.py** — Persistent UI widget (bottom-right, every page).
+- Knowledge source: `static/about/prezent_energy_fact_base.txt` (loaded at import).
+- Model: `claude-sonnet-4-6`, `max_tokens=1024`.
+- Endpoint: `POST /api/chat`
 
-- Replaces a static blog. Users type a query; agent fetches relevant context.
-- Source categories to monitor/query: DOE Infrastructure eXCHANGE (GDO/MESC), PG&E PAC updates, Portable DC Fast Charger market data, CA SB 100, LCFS 2026, ISO 15118-20 / UL 9741.
-- Endpoint: `POST /api/news-query` — returns summarized, cited results.
+**news_agent.py** — Conversational CaaS/regulatory Q&A.
+- Stateless; supports optional multi-turn `conversation_history`.
+- Model: `claude-sonnet-4-6`, `max_tokens=1500`.
+- Endpoint: `POST /api/news-query`
+
+**industry_news_agent.py** — Daily-cached EV news + regulatory feed.
+- Sources: Electrek, CleanTechnica, Green Car Reports (RSS) + Federal Register API.
+- Claude Haiku curates raw items to top 10 per category (news / regulations).
+- Two-layer cache: in-memory (per worker) → `instance/news_cache.json` (24 h TTL).
+- Endpoint: `GET /api/industry-news`; JS polls `is_loading()` until ready.
 
 ### Page Sections (index.html)
 
