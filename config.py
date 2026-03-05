@@ -22,8 +22,8 @@ class Config:
     MAIL_PORT = int(os.getenv("MAIL_PORT", "25"))
     MAIL_USE_TLS = False
     MAIL_USE_SSL = False
-    MAIL_USERNAME = None
-    MAIL_PASSWORD = None
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME") or None
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD") or None
     MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", "info@prezent.energy")
 
 
