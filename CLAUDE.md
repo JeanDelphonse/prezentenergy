@@ -11,7 +11,7 @@ Build the **Prezent.Energy** marketing and lead-generation website as specified 
 | Layer | Choice | Rationale |
 |---|---|---|
 | Backend | Flask (Python) | Consistent with sibling projects in this workspace |
-| Database | SQLite via SQLAlchemy | Required by PRD; portable and maintenance-friendly |
+| Database | MySQL via SQLAlchemy | Required by PRD; portable and maintenance-friendly |
 | Frontend | Jinja2 templates + Tailwind CSS | No build step needed for MVP |
 | AI Chatbot | Anthropic Claude API | Trained on PRD specs and V2X roadmap |
 | News Agent | Anthropic Claude API + web search | Dynamic CaaS/regulatory feed |
