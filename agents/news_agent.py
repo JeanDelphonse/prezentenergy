@@ -1,5 +1,5 @@
-import anthropic
 import requests
+from openai import OpenAI
 from flask import current_app
 
 NEWS_SYSTEM_PROMPT = """You are the Prezent.Energy News & Regulatory Intelligence agent.
@@ -34,15 +34,17 @@ def query_news_agent(user_query: str, conversation_history: list[dict] = None) -
     Answer a user query about CaaS news and regulations using Claude.
     conversation_history is an optional list of prior {role, content} exchanges.
     """
-    client = anthropic.Anthropic(api_key=current_app.config["ANTHROPIC_API_KEY"])
+    client = OpenAI(
+        api_key=current_app.config["KIMI_API_KEY"],
+        base_url="https://api.moonshot.cn/v1",
+    )
 
     messages = list(conversation_history or [])
     messages.append({"role": "user", "content": user_query})
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model="moonshot-v1-32k",
         max_tokens=1500,
-        system=NEWS_SYSTEM_PROMPT,
-        messages=messages,
+        messages=[{"role": "system", "content": NEWS_SYSTEM_PROMPT}] + messages,
     )
-    return response.content[0].text
+    return response.choices[0].message.content

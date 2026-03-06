@@ -18,7 +18,7 @@ import threading
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 
-import anthropic
+from openai import OpenAI
 import requests
 
 # ── File cache path ───────────────────────────────────────────────────────────
@@ -136,7 +136,7 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 10) -> list[di
     if not items:
         return fallback
 
-    api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    api_key = os.getenv("KIMI_API_KEY", "")
     if not api_key:
         return fallback
 
@@ -170,13 +170,13 @@ def _curate_with_claude(items: list[dict], section: str, n: int = 10) -> list[di
     )
 
     try:
-        client = anthropic.Anthropic(api_key=api_key)
-        resp   = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        client = OpenAI(api_key=api_key, base_url="https://api.moonshot.cn/v1")
+        resp   = client.chat.completions.create(
+            model="moonshot-v1-8k",
             max_tokens=1200,
             messages=[{"role": "user", "content": prompt}],
         )
-        text = resp.content[0].text.strip()
+        text = resp.choices[0].message.content.strip()
         if "```" in text:
             parts = text.split("```")
             text  = parts[1] if len(parts) > 1 else parts[0]

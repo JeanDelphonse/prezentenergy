@@ -1,5 +1,5 @@
 import os
-import anthropic
+from openai import OpenAI
 from flask import current_app
 
 _FACT_BASE_PATH = os.path.join(
@@ -30,12 +30,14 @@ def get_chat_response(messages: list[dict]) -> str:
     Send a conversation to Claude and return the assistant reply.
     `messages` is a list of {"role": "user"/"assistant", "content": "..."} dicts.
     """
-    client = anthropic.Anthropic(api_key=current_app.config["ANTHROPIC_API_KEY"])
-
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=1024,
-        system=SYSTEM_PROMPT,
-        messages=messages,
+    client = OpenAI(
+        api_key=current_app.config["KIMI_API_KEY"],
+        base_url="https://api.moonshot.cn/v1",
     )
-    return response.content[0].text
+
+    response = client.chat.completions.create(
+        model="moonshot-v1-32k",
+        max_tokens=1024,
+        messages=[{"role": "system", "content": SYSTEM_PROMPT}] + messages,
+    )
+    return response.choices[0].message.content
