@@ -9,7 +9,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///leads.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    KIMI_API_KEY = os.environ.get("KIMI_API_KEY", "")
+    ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
     GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
     # Prevent "MySQL server has gone away" on long-idle connections
     SQLALCHEMY_ENGINE_OPTIONS = {
